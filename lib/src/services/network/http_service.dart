@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
 
-import '../base/api.dart';
 import '../base/failure.dart';
 import 'i_network_service.dart';
 
@@ -14,9 +13,6 @@ class HttpService implements INetworkService {
   final Client client;
 
   HttpService({required this.client});
-
-  @override
-  API get getAPI => API();
 
   void _throwOnFail(Response res) {
     if (res.statusCode != HttpStatus.ok) {
@@ -44,7 +40,7 @@ class HttpService implements INetworkService {
     } on HttpException {
       throw Failure('Please check your internet connection');
     } catch (ex) {
-      throw Failure(ex.toString());
+      rethrow;
     }
   }
 }
