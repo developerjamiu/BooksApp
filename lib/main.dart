@@ -1,9 +1,12 @@
+import 'src/services/base/api.dart';
+import 'src/services/network/http_service.dart';
+import 'src/services/network/i_network_service.dart';
 import 'package:flutter/material.dart';
 
 import 'src/core/theme.dart';
 import 'src/views/home_view.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 

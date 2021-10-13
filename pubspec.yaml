@@ -14,9 +14,17 @@ dependencies:
 
   google_fonts: ^2.1.0
 
+  hooks_riverpod: ^0.14.0+5
+  flutter_hooks: ^0.18.0
+
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  logging: ^1.0.2
+  mockito: ^5.0.16
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
