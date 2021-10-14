@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants/dimensions.dart';
+import '../core/constants/dimensions.dart';
 
 class Pill extends StatelessWidget {
   final double width;
@@ -8,7 +8,7 @@ class Pill extends StatelessWidget {
 
   const Pill({
     Key? key,
-    this.width = 100,
+    this.width = 108,
     required this.text,
   }) : super(key: key);
 

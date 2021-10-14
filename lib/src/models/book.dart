@@ -59,9 +59,9 @@ class VolumeInfo {
   final String title;
   final List<String>? authors;
   final String? publisher;
-  final String publishedDate;
+  final String? publishedDate;
   final String? description;
-  final List<IndustryIdentifiers> industryIdentifiers;
+  final List<IndustryIdentifiers>? industryIdentifiers;
   final ReadingModes readingModes;
   final int? pageCount;
   final String printType;
@@ -109,9 +109,10 @@ class VolumeInfo {
         publisher: map['publisher'],
         publishedDate: map['publishedDate'],
         description: map['description'],
-        industryIdentifiers: List<IndustryIdentifiers>.from(
-            map['industryIdentifiers']
-                ?.map((x) => IndustryIdentifiers.fromMap(x))),
+        industryIdentifiers: map['industryIdentifiers'] != null
+            ? List<IndustryIdentifiers>.from(map['industryIdentifiers']
+                ?.map((x) => IndustryIdentifiers.fromMap(x)))
+            : null,
         readingModes: ReadingModes.fromMap(map['readingModes']),
         pageCount: map['pageCount'],
         printType: map['printType'],

@@ -1,8 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors
 
+import 'package:books/src/core/constants/dimensions.dart';
 import 'package:flutter/material.dart';
-
-import '../constants/dimensions.dart';
 
 class Spacing extends StatelessWidget {
   final double height;

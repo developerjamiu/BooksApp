@@ -1,18 +1,19 @@
-import 'package:books/src/services/base/api_data.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 
 import '../models/book.dart';
+import '../services/base/api_data.dart';
 import '../services/network/i_network_service.dart';
 
-class BookRepository {
+class BooksRepository {
   final log = Logger('BookRepository');
 
   final INetworkService networkService;
 
-  BookRepository({required this.networkService});
+  BooksRepository({required this.networkService});
 
   Future<List<Book>> getBooks({
-    String queryString = '\'\'',
+    required String queryString,
     int currentPage = 1,
     int pageSize = 20,
   }) async {
@@ -30,3 +31,9 @@ class BookRepository {
     return BookResponse.fromMap(response).books;
   }
 }
+
+final booksRepository = Provider<BooksRepository>(
+  (ref) => BooksRepository(
+    networkService: ref.read(networkService),
+  ),
+);
