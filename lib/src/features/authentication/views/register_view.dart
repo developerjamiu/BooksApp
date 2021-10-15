@@ -106,7 +106,9 @@ class RegisterView extends HookWidget {
                     const Spacing.smallHeight(),
                     TextButton(
                       onPressed: () {
-                        context.read(navigationServiceProvider).navigateBack();
+                        context
+                            .read(registerNotifierProvider)
+                            .navigateToLogin();
                       },
                       child: const Text('Have Account? Login'),
                     ),

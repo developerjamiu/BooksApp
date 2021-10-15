@@ -7,15 +7,11 @@ import '../../../services/base/failure.dart';
 import '../../../services/snackbar_service.dart';
 
 class BooksNotitier extends BaseChangeNotifier {
-  BooksNotitier({
-    required this.booksRepository,
-    required this.snackbarService,
-  }) {
+  BooksNotitier(this._read) {
     getBooks();
   }
 
-  final BooksRepository booksRepository;
-  final SnackbarService snackbarService;
+  final Reader _read;
 
   late List<Book> _books;
   List<Book> get books => _books;
@@ -36,7 +32,7 @@ class BooksNotitier extends BaseChangeNotifier {
       _searchQuery = query;
       _currentPage = 1;
 
-      _books = await booksRepository.getBooks(
+      _books = await _read(booksRepository).getBooks(
         currentPage: _currentPage,
         queryString: query,
       );
@@ -53,14 +49,14 @@ class BooksNotitier extends BaseChangeNotifier {
 
   Future<void> getMoreBooks() async {
     try {
-      final books = await booksRepository.getBooks(
+      final books = await _read(booksRepository).getBooks(
         queryString: searchQuery,
         currentPage: _currentPage,
       );
 
       if (books.isEmpty) {
         _moreDataAvailable = false;
-        snackbarService
+        _read(snackbarService)
             .showErrorSnackBar('You have reached the end of the book list');
       }
 
@@ -74,8 +70,5 @@ class BooksNotitier extends BaseChangeNotifier {
 }
 
 final booksNotifierProvider = ChangeNotifierProvider(
-  (ref) => BooksNotitier(
-    booksRepository: ref.read(booksRepository),
-    snackbarService: ref.read(snackbarServiceProvider),
-  ),
+  (ref) => BooksNotitier(ref.read),
 );

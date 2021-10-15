@@ -67,6 +67,4 @@ class NavigationService {
   }
 }
 
-final navigationServiceProvider = Provider(
-  (ref) => NavigationService(),
-);
+final navigationService = Provider((ref) => NavigationService());

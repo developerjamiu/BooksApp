@@ -16,15 +16,7 @@ class UserRepository {
   final String? userId;
   final FirebaseFirestore firestore;
 
-  Stream<AppUser> getUser() {
-    return firestore.userCollection.doc(userId).snapshots().map(
-          (documentSnapshot) => AppUser.fromDocumentSnapshot(
-            documentSnapshot,
-          ),
-        );
-  }
-
-  Future<AppUser> getUserFuture() async {
+  Future<AppUser> getUser() async {
     final user = await firestore.userCollection.doc(userId).get();
     return AppUser.fromDocumentSnapshot(user);
   }

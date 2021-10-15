@@ -7,31 +7,25 @@ import '../../../services/navigation_service.dart';
 import '../../../services/snackbar_service.dart';
 
 class ForgotPasswordController extends BaseChangeNotifier {
-  ForgotPasswordController({
-    required this.authenticationRepository,
-    required this.snackbarService,
-    required this.navigationService,
-  });
+  ForgotPasswordController(this._read);
 
-  final AuthenticationRepository authenticationRepository;
-  final SnackbarService snackbarService;
-  final NavigationService navigationService;
+  final Reader _read;
 
   Future<void> resetPassword(String emailAddress) async {
     setState(state: AppState.loading);
 
     try {
-      await authenticationRepository.resetPassword(emailAddress);
+      await _read(authenticationRepository).resetPassword(emailAddress);
 
-      navigationService.navigateBack();
+      _read(navigationService).navigateBack();
 
-      snackbarService.showSuccessSnackBar(
+      _read(snackbarService).showSuccessSnackBar(
         'Instructions to reset your password has been sent to your email',
       );
     } on Failure catch (ex) {
-      navigationService.navigateBack();
+      _read(navigationService).navigateBack();
 
-      snackbarService.showErrorSnackBar(ex.message);
+      _read(snackbarService).showErrorSnackBar(ex.message);
     } finally {
       setState(state: AppState.idle);
     }
@@ -39,9 +33,5 @@ class ForgotPasswordController extends BaseChangeNotifier {
 }
 
 final forgotPasswordNotifierProvider = ChangeNotifierProvider.autoDispose(
-  (ref) => ForgotPasswordController(
-    authenticationRepository: ref.read(authenticationRepository),
-    navigationService: ref.read(navigationServiceProvider),
-    snackbarService: ref.read(snackbarServiceProvider),
-  ),
+  (ref) => ForgotPasswordController(ref.read),
 );

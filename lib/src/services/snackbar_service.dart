@@ -24,6 +24,4 @@ class SnackbarService {
   }
 }
 
-final snackbarServiceProvider = Provider(
-  (ref) => SnackbarService(),
-);
+final snackbarService = Provider((ref) => SnackbarService());

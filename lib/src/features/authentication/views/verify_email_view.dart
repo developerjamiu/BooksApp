@@ -51,10 +51,8 @@ class VerifyEmailView extends StatelessWidget {
                       const SizedBox(height: 24),
                       AppElevatedButton(
                         label: 'Go to Log In',
-                        onPressed: () async {
-                          context
-                              .read(navigationServiceProvider)
-                              .navigateBack();
+                        onPressed: () {
+                          context.read(navigationService).navigateBack();
                         },
                       )
                     ],

@@ -1,17 +1,15 @@
-import 'package:books/src/core/constants/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../core/routes.dart';
+import '../../../core/constants/images.dart';
 import '../../../core/utilities/base_change_notifier.dart';
 import '../../../core/utilities/validation_extensions.dart';
-import '../notifiers/login_notifier.dart';
-import '../../../services/navigation_service.dart';
 import '../../../widgets/app_elevated_button.dart';
 import '../../../widgets/app_text_field.dart';
 import '../../../widgets/spacing.dart';
 import '../../../widgets/statusbar.dart';
+import '../notifiers/login_notifier.dart';
 import 'forgot_password_view.dart';
 
 class LoginView extends HookWidget {
@@ -126,8 +124,8 @@ class LoginView extends HookWidget {
                     TextButton(
                       onPressed: () {
                         context
-                            .read(navigationServiceProvider)
-                            .navigateToNamed(Routes.register);
+                            .read(loginNotifierProvider)
+                            .navigateToRegister();
                       },
                       child: const Text('No Account? Register'),
                     ),

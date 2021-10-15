@@ -2,25 +2,18 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/routes.dart';
 import '../../../core/utilities/base_change_notifier.dart';
-import '../models/app_user.dart';
 import '../../../repositories/authentication_repository.dart';
 import '../../../repositories/user_repository.dart';
 import '../../../services/base/failure.dart';
 import '../../../services/navigation_service.dart';
 import '../../../services/snackbar_service.dart';
+import '../models/app_user.dart';
+import '../providers/user_provider.dart';
 
 class LoginNotifier extends BaseChangeNotifier {
-  LoginNotifier({
-    required this.authenticationRepository,
-    required this.snackbarService,
-    required this.navigationService,
-    required this.userRepository,
-  });
+  LoginNotifier(this._read);
 
-  final AuthenticationRepository authenticationRepository;
-  final UserRepository userRepository;
-  final SnackbarService snackbarService;
-  final NavigationService navigationService;
+  final Reader _read;
 
   bool _passwordVisible = false;
 
@@ -38,14 +31,18 @@ class LoginNotifier extends BaseChangeNotifier {
     setState(state: AppState.loading);
 
     try {
-      await authenticationRepository.login(
+      await _read(authenticationRepository).login(
         emailAddress: emailAddress.trim(),
         password: password,
       );
 
-      navigationService.navigateOffNamed(Routes.books);
+      final currentUserData = await _read(userRepository).getUser();
+
+      _read(userProvider).state = currentUserData;
+
+      _read(navigationService).navigateOffNamed(Routes.books);
     } on Failure catch (ex) {
-      snackbarService.showErrorSnackBar(ex.message);
+      _read(snackbarService).showErrorSnackBar(ex.message);
     } finally {
       setState(state: AppState.idle);
     }
@@ -53,30 +50,36 @@ class LoginNotifier extends BaseChangeNotifier {
 
   Future<void> loginUserWithGoogle() async {
     try {
-      final user = await authenticationRepository.loginWithGoogle();
+      final user = await _read(authenticationRepository).loginWithGoogle();
 
       if (user != null) {
-        await userRepository.createUserWithGoogle(
+        await _read(userRepository).createUserWithGoogle(
           UserParams(
             fullName: user.displayName!,
             emailAddress: user.email!,
           ),
         );
-        navigationService.navigateOffNamed(Routes.books);
+
+        final currentUserData = await _read(userRepository).getUser();
+
+        _read(userProvider).state = currentUserData;
+
+        _read(navigationService).navigateOffNamed(Routes.books);
+      } else {
+        _read(snackbarService).showErrorSnackBar('No email selected');
       }
     } on Failure catch (ex) {
-      snackbarService.showErrorSnackBar(ex.message);
+      _read(snackbarService).showErrorSnackBar(ex.message);
     } finally {
       setState(state: AppState.idle);
     }
   }
+
+  void navigateToRegister() {
+    _read(navigationService).navigateToNamed(Routes.register);
+  }
 }
 
 final loginNotifierProvider = ChangeNotifierProvider.autoDispose(
-  (ref) => LoginNotifier(
-    authenticationRepository: ref.read(authenticationRepository),
-    snackbarService: ref.read(snackbarServiceProvider),
-    navigationService: ref.read(navigationServiceProvider),
-    userRepository: ref.read(userRepository),
-  ),
+  (ref) => LoginNotifier(ref.read),
 );

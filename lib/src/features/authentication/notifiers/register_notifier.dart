@@ -10,17 +10,9 @@ import '../../../services/navigation_service.dart';
 import '../../../services/snackbar_service.dart';
 
 class RegisterNotifier extends BaseChangeNotifier {
-  RegisterNotifier({
-    required this.authenticationRepository,
-    required this.snackbarService,
-    required this.navigationService,
-    required this.userRepository,
-  });
+  RegisterNotifier(this._read);
 
-  final AuthenticationRepository authenticationRepository;
-  final UserRepository userRepository;
-  final SnackbarService snackbarService;
-  final NavigationService navigationService;
+  final Reader _read;
 
   bool _passwordVisible = false;
 
@@ -35,27 +27,26 @@ class RegisterNotifier extends BaseChangeNotifier {
     setState(state: AppState.loading);
 
     try {
-      await authenticationRepository.register(
+      await _read(authenticationRepository).register(
         emailAddress: userParams.emailAddress,
         password: userParams.password!,
       );
 
-      await userRepository.createUser(userParams);
+      await _read(userRepository).createUser(userParams);
 
-      navigationService.navigateOffNamed(Routes.verifyEmail);
+      _read(navigationService).navigateOffNamed(Routes.verifyEmail);
     } on Failure catch (ex) {
-      snackbarService.showErrorSnackBar(ex.message);
+      _read(snackbarService).showErrorSnackBar(ex.message);
     } finally {
       setState(state: AppState.idle);
     }
   }
+
+  /// Register was pushed on to the navigation stack, so here we are just
+  /// ...popping it off the stack to return to login
+  void navigateToLogin() => _read(navigationService).navigateBack();
 }
 
 final registerNotifierProvider = ChangeNotifierProvider.autoDispose(
-  (ref) => RegisterNotifier(
-    authenticationRepository: ref.read(authenticationRepository),
-    userRepository: ref.read(userRepository),
-    navigationService: ref.read(navigationServiceProvider),
-    snackbarService: ref.read(snackbarServiceProvider),
-  ),
+  (ref) => RegisterNotifier(ref.read),
 );
