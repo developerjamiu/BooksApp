@@ -1,9 +1,9 @@
-import 'package:books/src/views/books_view.dart';
+import 'package:books/src/features/books/views/books_view.dart';
 import 'package:flutter/material.dart';
 
-import '../views/login_view.dart';
-import '../views/register_view.dart';
-import '../views/verify_email_view.dart';
+import '../features/authentication/views/login_view.dart';
+import '../features/authentication/views/register_view.dart';
+import '../features/authentication/views/verify_email_view.dart';
 
 class Routes {
   static const login = '/login';

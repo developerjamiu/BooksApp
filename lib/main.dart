@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'src/core/routes.dart';
 import 'src/core/theme.dart';
 import 'src/services/snackbar_service.dart';
-import 'src/views/login_view.dart';
+import 'src/features/authentication/views/login_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

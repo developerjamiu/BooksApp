@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../services/navigation_service.dart';
-import '../widgets/app_elevated_button.dart';
-import '../widgets/spacing.dart';
-import '../widgets/statusbar.dart';
+import '../../../services/navigation_service.dart';
+import '../../../widgets/app_elevated_button.dart';
+import '../../../widgets/spacing.dart';
+import '../../../widgets/statusbar.dart';
 
 class VerifyEmailView extends StatelessWidget {
   const VerifyEmailView({Key? key}) : super(key: key);

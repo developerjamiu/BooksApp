@@ -1,13 +1,13 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../core/routes.dart';
-import '../core/utilities/base_change_notifier.dart';
+import '../../../core/routes.dart';
+import '../../../core/utilities/base_change_notifier.dart';
 import '../models/app_user.dart';
-import '../repositories/authentication_repository.dart';
-import '../repositories/user_repository.dart';
-import '../services/base/failure.dart';
-import '../services/navigation_service.dart';
-import '../services/snackbar_service.dart';
+import '../../../repositories/authentication_repository.dart';
+import '../../../repositories/user_repository.dart';
+import '../../../services/base/failure.dart';
+import '../../../services/navigation_service.dart';
+import '../../../services/snackbar_service.dart';
 
 class LoginNotifier extends BaseChangeNotifier {
   LoginNotifier({

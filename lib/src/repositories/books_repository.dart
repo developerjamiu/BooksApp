@@ -1,7 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 
-import '../models/book.dart';
+import '../features/books/models/book.dart';
 import '../services/base/api_data.dart';
 import '../services/network/i_network_service.dart';
 

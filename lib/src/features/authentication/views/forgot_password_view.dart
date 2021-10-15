@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../core/utilities/base_change_notifier.dart';
-import '../core/utilities/validation_extensions.dart';
+import '../../../core/utilities/base_change_notifier.dart';
+import '../../../core/utilities/validation_extensions.dart';
 import '../notifiers/forgot_password_notifier.dart';
-import '../widgets/app_elevated_button.dart';
-import '../widgets/app_text_field.dart';
-import '../widgets/spacing.dart';
+import '../../../widgets/app_elevated_button.dart';
+import '../../../widgets/app_text_field.dart';
+import '../../../widgets/spacing.dart';
 
 /// Hook widget is currently causing unexpected behaviour with bottom sheets
 /// So here, a stateful widget is used instead

@@ -1,10 +1,10 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../core/utilities/base_change_notifier.dart';
+import '../../../core/utilities/base_change_notifier.dart';
 import '../models/book.dart';
-import '../repositories/books_repository.dart';
-import '../services/base/failure.dart';
-import '../services/snackbar_service.dart';
+import '../../../repositories/books_repository.dart';
+import '../../../services/base/failure.dart';
+import '../../../services/snackbar_service.dart';
 
 class BooksNotitier extends BaseChangeNotifier {
   BooksNotitier({

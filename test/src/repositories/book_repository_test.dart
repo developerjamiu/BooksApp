@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import 'package:books/src/models/book.dart';
+import 'package:books/src/features/books/models/book.dart';
 import 'package:books/src/repositories/books_repository.dart';
 import 'package:books/src/services/base/failure.dart';
 import 'package:books/src/services/network/i_network_service.dart';

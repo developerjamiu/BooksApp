@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../models/app_user.dart';
+import '../features/authentication/models/app_user.dart';
 import '../services/base/failure.dart';
 import 'authentication_repository.dart';
 
