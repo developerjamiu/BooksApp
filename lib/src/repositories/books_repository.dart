@@ -33,7 +33,5 @@ class BooksRepository {
 }
 
 final booksRepository = Provider<BooksRepository>(
-  (ref) => BooksRepository(
-    networkService: ref.read(networkService),
-  ),
+  (ref) => BooksRepository(networkService: ref.read(networkService)),
 );

@@ -4,13 +4,18 @@ import '../core/utilities/base_change_notifier.dart';
 import '../models/book.dart';
 import '../repositories/books_repository.dart';
 import '../services/base/failure.dart';
+import '../services/snackbar_service.dart';
 
 class BooksNotitier extends BaseChangeNotifier {
-  BooksNotitier(this._booksRepository) {
+  BooksNotitier({
+    required this.booksRepository,
+    required this.snackbarService,
+  }) {
     getBooks();
   }
 
-  final BooksRepository _booksRepository;
+  final BooksRepository booksRepository;
+  final SnackbarService snackbarService;
 
   late List<Book> _books;
   List<Book> get books => _books;
@@ -31,7 +36,7 @@ class BooksNotitier extends BaseChangeNotifier {
       _searchQuery = query;
       _currentPage = 1;
 
-      _books = await _booksRepository.getBooks(
+      _books = await booksRepository.getBooks(
         currentPage: _currentPage,
         queryString: query,
       );
@@ -48,14 +53,15 @@ class BooksNotitier extends BaseChangeNotifier {
 
   Future<void> getMoreBooks() async {
     try {
-      final books = await _booksRepository.getBooks(
+      final books = await booksRepository.getBooks(
         queryString: searchQuery,
         currentPage: _currentPage,
       );
 
       if (books.isEmpty) {
         _moreDataAvailable = false;
-        //TODO: Show snackbar here to say 'Max reached'
+        snackbarService
+            .showErrorSnackBar('You have reached the end of the book list');
       }
 
       _books.addAll(books);
@@ -68,5 +74,8 @@ class BooksNotitier extends BaseChangeNotifier {
 }
 
 final booksNotifierProvider = ChangeNotifierProvider(
-  (ref) => BooksNotitier(ref.read(booksRepository)),
+  (ref) => BooksNotitier(
+    booksRepository: ref.read(booksRepository),
+    snackbarService: ref.read(snackbarServiceProvider),
+  ),
 );

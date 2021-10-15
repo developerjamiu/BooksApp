@@ -17,6 +17,14 @@ class AppTheme {
         textTheme: GoogleFonts.montserratTextTheme(
           _textTheme(colorScheme),
         ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size.fromHeight(48),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+            ),
+          ),
+        ),
       );
 
   static final ColorScheme _lightColorScheme =
@@ -46,6 +54,11 @@ class AppTheme {
         ),
         bodyText2: TextStyle(
           color: colorScheme.onSurface,
+        ),
+        button: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+          color: colorScheme.onPrimary,
         ),
       );
 }
