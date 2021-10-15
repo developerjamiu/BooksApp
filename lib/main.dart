@@ -1,12 +1,12 @@
-import 'package:books/src/services/navigation_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'src/core/routes.dart';
 import 'src/core/theme.dart';
+import 'src/features/startup/views/startup_view.dart';
+import 'src/services/navigation_service.dart';
 import 'src/services/snackbar_service.dart';
-import 'src/features/authentication/views/login_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Books',
       theme: AppTheme.lightTheme,
-      home: LoginView(),
+      home: const StartupView(),
       onGenerateRoute: Routes.generateRoute,
       navigatorKey: context.read(navigationService).navigatorKey,
       scaffoldMessengerKey: context.read(snackbarService).scaffoldMessengerKey,
