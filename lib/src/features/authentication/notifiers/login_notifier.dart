@@ -51,6 +51,7 @@ class LoginNotifier extends BaseChangeNotifier {
         _read(snackbarService).showErrorSnackBar('No email selected');
       }
     } on Failure catch (ex) {
+      print(ex);
       _read(snackbarService).showErrorSnackBar(ex.message);
     } finally {
       setState(state: AppState.idle);
