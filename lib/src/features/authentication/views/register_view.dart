@@ -4,13 +4,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/utilities/base_change_notifier.dart';
 import '../../../core/utilities/validation_extensions.dart';
-import '../models/app_user.dart';
-import '../notifiers/register_notifier.dart';
-import '../../../services/navigation_service.dart';
 import '../../../widgets/app_elevated_button.dart';
 import '../../../widgets/app_text_field.dart';
 import '../../../widgets/spacing.dart';
 import '../../../widgets/statusbar.dart';
+import '../models/app_user.dart';
+import '../notifiers/register_notifier.dart';
 
 class RegisterView extends HookWidget {
   RegisterView({Key? key}) : super(key: key);

@@ -3,12 +3,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../core/routes.dart';
 import '../../../core/utilities/base_change_notifier.dart';
 import '../../../repositories/authentication_repository.dart';
-import '../../../repositories/user_repository.dart';
 import '../../../services/base/failure.dart';
 import '../../../services/navigation_service.dart';
 import '../../../services/snackbar_service.dart';
-import '../models/app_user.dart';
-import '../providers/user_provider.dart';
 
 class LoginNotifier extends BaseChangeNotifier {
   LoginNotifier(this._read);
@@ -36,11 +33,7 @@ class LoginNotifier extends BaseChangeNotifier {
         password: password,
       );
 
-      final currentUserData = await _read(userRepository).getUser();
-
-      _read(userProvider).state = currentUserData;
-
-      _read(navigationService).navigateOffNamed(Routes.books);
+      _read(navigationService).navigateOffNamed(Routes.profile);
     } on Failure catch (ex) {
       _read(snackbarService).showErrorSnackBar(ex.message);
     } finally {
@@ -53,18 +46,7 @@ class LoginNotifier extends BaseChangeNotifier {
       final user = await _read(authenticationRepository).loginWithGoogle();
 
       if (user != null) {
-        await _read(userRepository).createUserWithGoogle(
-          UserParams(
-            fullName: user.displayName!,
-            emailAddress: user.email!,
-          ),
-        );
-
-        final currentUserData = await _read(userRepository).getUser();
-
-        _read(userProvider).state = currentUserData;
-
-        _read(navigationService).navigateOffNamed(Routes.books);
+        _read(navigationService).navigateOffNamed(Routes.profile);
       } else {
         _read(snackbarService).showErrorSnackBar('No email selected');
       }

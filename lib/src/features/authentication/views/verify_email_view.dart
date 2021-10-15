@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../services/navigation_service.dart';
 import '../../../widgets/app_elevated_button.dart';
 import '../../../widgets/spacing.dart';
 import '../../../widgets/statusbar.dart';
+import '../notifiers/verify_email_notifier.dart';
 
 class VerifyEmailView extends StatelessWidget {
   const VerifyEmailView({Key? key}) : super(key: key);
@@ -51,8 +51,10 @@ class VerifyEmailView extends StatelessWidget {
                       const SizedBox(height: 24),
                       AppElevatedButton(
                         label: 'Go to Log In',
-                        onPressed: () {
-                          context.read(navigationService).navigateBack();
+                        onPressed: () async {
+                          await context
+                              .read(verifyEmailNotifierProvider)
+                              .navigateToLogin();
                         },
                       )
                     ],

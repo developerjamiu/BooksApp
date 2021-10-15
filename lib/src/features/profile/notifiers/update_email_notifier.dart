@@ -6,10 +6,9 @@ import '../../../repositories/authentication_repository.dart';
 import '../../../services/base/failure.dart';
 import '../../../services/navigation_service.dart';
 import '../../../services/snackbar_service.dart';
-import '../models/app_user.dart';
 
-class RegisterNotifier extends BaseChangeNotifier {
-  RegisterNotifier(this._read);
+class UpdateEmailNotifier extends BaseChangeNotifier {
+  UpdateEmailNotifier(this._read);
 
   final Reader _read;
 
@@ -19,35 +18,36 @@ class RegisterNotifier extends BaseChangeNotifier {
 
   void togglePasswordVisibility() {
     _passwordVisible = !_passwordVisible;
-    notifyListeners();
+    setState();
   }
 
-  Future<void> registerUser({required UserParams userParams}) async {
+  Future<void> updateEmail(String emailAddress, String password) async {
     setState(state: AppState.loading);
 
     try {
-      await _read(authenticationRepository).register(
-        fullName: userParams.fullName,
-        emailAddress: userParams.emailAddress.trim(),
-        password: userParams.password!,
+      await _read(authenticationRepository).updateEmail(
+        newEmailAddress: emailAddress,
+        password: password,
       );
 
       _read(navigationService).navigateOffAllNamed(
         Routes.verifyEmail,
         (_) => false,
       );
+
+      _read(snackbarService).showSuccessSnackBar(
+        'Email Update Successful! Verify and Login Again',
+      );
     } on Failure catch (ex) {
+      _read(navigationService).navigateBack();
+
       _read(snackbarService).showErrorSnackBar(ex.message);
     } finally {
       setState(state: AppState.idle);
     }
   }
-
-  /// Register was pushed on to the navigation stack, so here we are just
-  /// ...popping it off the stack to return to login
-  void navigateToLogin() => _read(navigationService).navigateBack();
 }
 
-final registerNotifierProvider = ChangeNotifierProvider.autoDispose(
-  (ref) => RegisterNotifier(ref.read),
+final updateEmailNotifierProvider = ChangeNotifierProvider(
+  (ref) => UpdateEmailNotifier(ref.read),
 );

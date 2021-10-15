@@ -1,4 +1,3 @@
-import 'package:books/src/repositories/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -6,11 +5,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/dimensions.dart';
 import '../../../core/utilities/base_change_notifier.dart';
-import '../models/book.dart';
-import '../notifiers/books_notifier.dart';
 import '../../../widgets/pill.dart';
 import '../../../widgets/spacing.dart';
 import '../../../widgets/statusbar.dart';
+import '../models/book.dart';
+import '../notifiers/books_notifier.dart';
 
 class BooksView extends HookWidget {
   const BooksView({Key? key}) : super(key: key);

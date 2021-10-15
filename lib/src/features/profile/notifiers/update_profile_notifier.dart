@@ -6,22 +6,29 @@ import '../../../services/base/failure.dart';
 import '../../../services/navigation_service.dart';
 import '../../../services/snackbar_service.dart';
 
-class ForgotPasswordNotifier extends BaseChangeNotifier {
-  ForgotPasswordNotifier(this._read);
+class UpdateProfileNotifier extends BaseChangeNotifier {
+  UpdateProfileNotifier(this._read);
 
   final Reader _read;
 
-  Future<void> resetPassword(String emailAddress) async {
+  bool _passwordVisible = false;
+
+  bool get passwordVisible => _passwordVisible;
+
+  void togglePasswordVisibility() {
+    _passwordVisible = !_passwordVisible;
+    setState();
+  }
+
+  Future<void> updateProfile(String fullName) async {
     setState(state: AppState.loading);
 
     try {
-      await _read(authenticationRepository).resetPassword(emailAddress.trim());
+      await _read(authenticationRepository).updateUser(fullName: fullName);
 
       _read(navigationService).navigateBack();
 
-      _read(snackbarService).showSuccessSnackBar(
-        'Instructions to reset your password has been sent to your email',
-      );
+      _read(snackbarService).showSuccessSnackBar('Profile Update Successful');
     } on Failure catch (ex) {
       _read(navigationService).navigateBack();
 
@@ -32,6 +39,6 @@ class ForgotPasswordNotifier extends BaseChangeNotifier {
   }
 }
 
-final forgotPasswordNotifierProvider = ChangeNotifierProvider.autoDispose(
-  (ref) => ForgotPasswordNotifier(ref.read),
+final updateProfileNotifierProvider = ChangeNotifierProvider(
+  (ref) => UpdateProfileNotifier(ref.read),
 );

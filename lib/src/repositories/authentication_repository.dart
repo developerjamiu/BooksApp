@@ -16,6 +16,7 @@ class AuthenticationRepository {
   User? get currentUser => firebaseAuth.currentUser;
 
   Future<void> register({
+    required String fullName,
     required String emailAddress,
     required String password,
   }) async {
@@ -26,10 +27,9 @@ class AuthenticationRepository {
         password: password,
       );
 
-      await _userCredential.user!.sendEmailVerification();
+      _userCredential.user!.updateDisplayName(fullName);
 
-      // users must verify their email before they can login
-      await firebaseAuth.signOut();
+      await _userCredential.user!.sendEmailVerification();
     } on FirebaseAuthException catch (ex) {
       throw Failure(ex.message ?? 'Something went wrong!');
     }
@@ -85,6 +85,14 @@ class AuthenticationRepository {
     }
   }
 
+  Future<void> updateUser({required String fullName}) async {
+    try {
+      await currentUser?.updateDisplayName(fullName);
+    } on FirebaseAuthException catch (ex) {
+      throw Failure(ex.message ?? 'Something went wrong!');
+    }
+  }
+
   Future<void> updateEmail({
     required String newEmailAddress,
     required String password,
@@ -123,7 +131,10 @@ class AuthenticationRepository {
     }
   }
 
-  Future<void> logout() async => await firebaseAuth.signOut();
+  Future<void> logout() async {
+    await firebaseAuth.signOut();
+    await googleSignIn.signOut();
+  }
 }
 
 final authenticationRepository = Provider(

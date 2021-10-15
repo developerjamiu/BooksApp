@@ -13,6 +13,7 @@ class AppTextField extends StatelessWidget {
   final String hintText;
   final TextInputType? keyboardType;
   final bool obscureText;
+  final String? labelText;
 
   const AppTextField({
     Key? key,
@@ -24,6 +25,7 @@ class AppTextField extends StatelessWidget {
     this.keyboardType,
     this.validator,
     this.suffixIcon,
+    this.labelText,
     this.obscureText = false,
   }) : super(key: key);
 
@@ -59,6 +61,7 @@ class AppTextField extends StatelessWidget {
           prefixIconConstraints: const BoxConstraints(
             minWidth: 64,
           ),
+          labelText: labelText,
         ),
       ),
     );

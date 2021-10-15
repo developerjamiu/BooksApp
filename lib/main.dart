@@ -26,9 +26,8 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       home: LoginView(),
       onGenerateRoute: Routes.generateRoute,
-      navigatorKey: context.read(navigationServiceProvider).navigatorKey,
-      scaffoldMessengerKey:
-          context.read(snackbarServiceProvider).scaffoldMessengerKey,
+      navigatorKey: context.read(navigationService).navigatorKey,
+      scaffoldMessengerKey: context.read(snackbarService).scaffoldMessengerKey,
     );
   }
 }
