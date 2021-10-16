@@ -22,9 +22,7 @@ class BooksRepository {
     final query =
         'q=$queryString&startIndex=$offSet&maxResults=$pageSize&key=$apiKey';
 
-    final uri = APIData.fetchBooks(
-      query: query,
-    );
+    final uri = APIData.fetchBooks(query: query);
 
     final response = await networkService.get(uri);
 

@@ -30,116 +30,122 @@ class LoginView extends HookWidget {
             width: 767,
             child: Form(
               key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Spacing.largeHeight(),
-                  ListView(
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.all(24),
-                    children: [
-                      Text(
-                        'Login',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      const Spacing.largeHeight(),
-                      AppTextField(
-                        hintText: 'Email Address',
-                        controller: emailAddressController,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: context.validateEmailAddress,
-                      ),
-                      const Spacing.bigHeight(),
-                      Consumer(
-                        builder: (context, watch, child) {
-                          final loginNotifier = watch(loginNotifierProvider);
-
-                          return AppTextField(
-                            hintText: 'Password',
-                            controller: passwordController,
-                            keyboardType: TextInputType.visiblePassword,
-                            obscureText: !loginNotifier.passwordVisible,
-                            suffixIcon: IconButton(
-                              icon: loginNotifier.passwordVisible
-                                  ? const Icon(Icons.visibility_off)
-                                  : const Icon(Icons.visibility),
-                              onPressed: loginNotifier.togglePasswordVisibility,
-                            ),
-                            validator: context.validatePassword,
-                          );
-                        },
-                      ),
-                      const Spacing.smallHeight(),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () => showDialog(
-                            context: context,
-                            builder: (_) => const ResponsiveDialog(
-                              child: ForgotPasswordView(),
-                            ),
-                          ),
-                          child: const Text('Forgot Password'),
-                        ),
-                      ),
-                      const Spacing.smallHeight(),
-                    ],
-                  ),
-                  const Spacing.mediumHeight(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Column(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Spacing.largeHeight(),
+                    ListView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(24),
                       children: [
-                        Consumer(
-                          builder: (_, watch, __) => AppElevatedButton(
-                            isLoading:
-                                watch(loginNotifierProvider).state.isLoading,
-                            label: 'Login',
-                            onPressed: () async {
-                              FocusScope.of(context).unfocus();
-
-                              if (_formKey.currentState!.validate()) {
-                                await context
-                                    .read(loginNotifierProvider)
-                                    .loginUser(
-                                      emailAddress: emailAddressController.text,
-                                      password: passwordController.text,
-                                    );
-                              }
-                            },
-                          ),
+                        Text(
+                          'Login',
+                          style: Theme.of(context).textTheme.headline6,
                         ),
-                        const Spacing.mediumHeight(),
-                        ElevatedButton.icon(
-                          icon: Image.asset(AppImages.googleLogo, width: 24),
-                          onPressed: () => context
-                              .read(loginNotifierProvider)
-                              .loginUserWithGoogle(),
-                          label: Text(
-                            'Sign in with Google',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onBackground,
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            primary: Theme.of(context).colorScheme.surface,
-                          ),
+                        const Spacing.largeHeight(),
+                        AppTextField(
+                          hintText: 'Email Address',
+                          controller: emailAddressController,
+                          keyboardType: TextInputType.emailAddress,
+                          validator: context.validateEmailAddress,
+                        ),
+                        const Spacing.bigHeight(),
+                        Consumer(
+                          builder: (context, watch, child) {
+                            final loginNotifier = watch(loginNotifierProvider);
+
+                            return AppTextField(
+                              hintText: 'Password',
+                              controller: passwordController,
+                              keyboardType: TextInputType.visiblePassword,
+                              obscureText: !loginNotifier.passwordVisible,
+                              suffixIcon: IconButton(
+                                icon: loginNotifier.passwordVisible
+                                    ? const Icon(Icons.visibility_off)
+                                    : const Icon(Icons.visibility),
+                                onPressed:
+                                    loginNotifier.togglePasswordVisibility,
+                              ),
+                              validator: context.validatePassword,
+                            );
+                          },
                         ),
                         const Spacing.smallHeight(),
-                        TextButton(
-                          onPressed: () {
-                            context
-                                .read(loginNotifierProvider)
-                                .navigateToRegister();
-                          },
-                          child: const Text('No Account? Register'),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () => showDialog(
+                              context: context,
+                              builder: (_) => const ResponsiveDialog(
+                                child: ForgotPasswordView(),
+                              ),
+                            ),
+                            child: const Text('Forgot Password'),
+                          ),
                         ),
                         const Spacing.smallHeight(),
                       ],
                     ),
-                  ),
-                ],
+                    const Spacing.mediumHeight(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: Column(
+                        children: [
+                          Consumer(
+                            builder: (_, watch, __) => AppElevatedButton(
+                              isLoading:
+                                  watch(loginNotifierProvider).state.isLoading,
+                              label: 'Login',
+                              onPressed: () async {
+                                FocusScope.of(context).unfocus();
+
+                                if (_formKey.currentState!.validate()) {
+                                  await context
+                                      .read(loginNotifierProvider)
+                                      .loginUser(
+                                        emailAddress:
+                                            emailAddressController.text,
+                                        password: passwordController.text,
+                                      );
+                                }
+                              },
+                            ),
+                          ),
+                          const Spacing.mediumHeight(),
+                          ElevatedButton.icon(
+                            icon: Image.asset(AppImages.googleLogo, width: 24),
+                            onPressed: () => context
+                                .read(loginNotifierProvider)
+                                .loginUserWithGoogle(),
+                            label: Text(
+                              'Sign in with Google',
+                              style: TextStyle(
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Theme.of(context).colorScheme.surface,
+                            ),
+                          ),
+                          const Spacing.smallHeight(),
+                          TextButton(
+                            onPressed: () {
+                              context
+                                  .read(loginNotifierProvider)
+                                  .navigateToRegister();
+                            },
+                            child: const Text('No Account? Register'),
+                          ),
+                          const Spacing.smallHeight(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

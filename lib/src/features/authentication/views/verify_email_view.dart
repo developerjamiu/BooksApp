@@ -17,47 +17,50 @@ class VerifyEmailView extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 36.0),
             child: Center(
-              child: Card(
-                color: Theme.of(context).primaryColor.withOpacity(0.1),
-                elevation: 0,
-                child: Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Books App',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      const Spacing.mediumHeight(),
-                      Icon(
-                        Icons.mail,
-                        size: 36,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      const Spacing.bigHeight(),
-                      Text(
-                        'Verify your email',
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      const Spacing.smallHeight(),
-                      Center(
-                        child: Text(
-                          'A verification link has been sent to your email. Please confirm that you want to use this as your account email address. Once it\'s done I\'ll be able to start assisting you.',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.subtitle2,
+              child: SizedBox(
+                width: 500,
+                child: Card(
+                  color: Theme.of(context).primaryColor.withOpacity(0.1),
+                  elevation: 0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Books App',
+                          style: Theme.of(context).textTheme.headline6,
                         ),
-                      ),
-                      const SizedBox(height: 24),
-                      AppElevatedButton(
-                        label: 'Go to Log In',
-                        onPressed: () async {
-                          await context
-                              .read(verifyEmailNotifierProvider)
-                              .navigateToLogin();
-                        },
-                      )
-                    ],
+                        const Spacing.mediumHeight(),
+                        Icon(
+                          Icons.mail,
+                          size: 36,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        const Spacing.bigHeight(),
+                        Text(
+                          'Verify your email',
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                        const Spacing.smallHeight(),
+                        Center(
+                          child: Text(
+                            'A verification link has been sent to your email. Please confirm that you want to use this as your account email address. Once it\'s done I\'ll be able to start assisting you.',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.subtitle2,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        AppElevatedButton(
+                          label: 'Go to Log In',
+                          onPressed: () async {
+                            await context
+                                .read(verifyEmailNotifierProvider)
+                                .navigateToLogin();
+                          },
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),

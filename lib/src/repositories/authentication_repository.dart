@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../features/authentication/models/user_params.dart';
 import '../services/base/failure.dart';
 
 class AuthenticationRepository {
@@ -16,19 +17,15 @@ class AuthenticationRepository {
 
   User? get currentUser => firebaseAuth.currentUser;
 
-  Future<void> register({
-    required String fullName,
-    required String emailAddress,
-    required String password,
-  }) async {
+  Future<void> register({required UserParams params}) async {
     try {
       final UserCredential _userCredential =
           await firebaseAuth.createUserWithEmailAndPassword(
-        email: emailAddress,
-        password: password,
+        email: params.emailAddress,
+        password: params.password,
       );
 
-      _userCredential.user!.updateDisplayName(fullName);
+      _userCredential.user!.updateDisplayName(params.fullName);
 
       await _userCredential.user!.sendEmailVerification();
     } on FirebaseAuthException catch (ex) {

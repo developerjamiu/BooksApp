@@ -266,7 +266,8 @@ class BookListItem extends StatelessWidget {
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(16),
                         child: Image.network(
-                          book.volumeInfo.imageLinks!.thumbnail,
+                          book.volumeInfo.imageLinks!.thumbnail
+                              .replaceFirst('http', 'https'),
                           fit: BoxFit.cover,
                         ),
                       ),

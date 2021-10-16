@@ -5,8 +5,7 @@ import '../../../widgets/statusbar.dart';
 import '../../books/views/books_view.dart';
 import '../../books/views/favorite_books_view.dart';
 import '../../profile/views/profile_view.dart';
-
-final homeCurrentPageIndex = StateProvider.autoDispose((ref) => 0);
+import '../providers/home_current_page_index_provider.dart';
 
 class HomeView extends ConsumerWidget {
   const HomeView({Key? key}) : super(key: key);

@@ -130,88 +130,82 @@ class BookListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => context.read(navigationService).navigateToNamed(
-            Routes.bookDetails,
-            arguments: book,
+    return Container(
+      padding: const EdgeInsets.all(Dimensions.small),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: const [AppColors.defaultShadow],
+        color: Theme.of(context).colorScheme.surface,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 4,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: Colors.green.shade50,
+              ),
+              height: double.infinity,
+              child: book.image == null
+                  ? const Spacing.empty()
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.network(
+                        book.image!,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+            ),
           ),
-      child: Container(
-        padding: const EdgeInsets.all(Dimensions.small),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: const [AppColors.defaultShadow],
-          color: Theme.of(context).colorScheme.surface,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 4,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Colors.green.shade50,
-                ),
-                height: double.infinity,
-                child: book.image == null
+          const Spacing.mediumWidth(),
+          Expanded(
+            flex: 7,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Spacer(flex: 3),
+                book.authors == null
                     ? const Spacing.empty()
-                    : ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image.network(
-                          book.image!,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-              ),
+                    : Text(book.authors![0]),
+                const Spacer(),
+                Text(
+                  book.title,
+                  style: Theme.of(context).textTheme.bodyText1,
+                  maxLines: 3,
+                ),
+                const Spacer(),
+                Row(
+                  children: [
+                    const Icon(Icons.star, color: Colors.amber, size: 16),
+                    const Spacing.smallWidth(),
+                    Text((book.averageRatings ?? 0).toString()),
+                  ],
+                ),
+                const Spacer(),
+                Row(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Pill(text: book.maturityRating),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        context
+                            .read(favoriteBooksNotifierProvider)
+                            .addOrRemoveFromFavorite(book);
+                      },
+                      icon: const Icon(Icons.delete),
+                    ),
+                  ],
+                ),
+                const Spacer(flex: 3),
+              ],
             ),
-            const Spacing.mediumWidth(),
-            Expanded(
-              flex: 7,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Spacer(flex: 3),
-                  book.authors == null
-                      ? const Spacing.empty()
-                      : Text(book.authors![0]),
-                  const Spacer(),
-                  Text(
-                    book.title,
-                    style: Theme.of(context).textTheme.bodyText1,
-                    maxLines: 3,
-                  ),
-                  const Spacer(),
-                  Row(
-                    children: [
-                      const Icon(Icons.star, color: Colors.amber, size: 16),
-                      const Spacing.smallWidth(),
-                      Text((book.averageRatings ?? 0).toString()),
-                    ],
-                  ),
-                  const Spacer(),
-                  Row(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Pill(text: book.maturityRating),
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        onPressed: () {
-                          context
-                              .read(favoriteBooksNotifierProvider)
-                              .addOrRemoveFromFavorite(book);
-                        },
-                        icon: const Icon(Icons.delete),
-                      ),
-                    ],
-                  ),
-                  const Spacer(flex: 3),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

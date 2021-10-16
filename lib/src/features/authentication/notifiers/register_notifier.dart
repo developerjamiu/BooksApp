@@ -6,7 +6,7 @@ import '../../../repositories/authentication_repository.dart';
 import '../../../services/base/failure.dart';
 import '../../../services/navigation_service.dart';
 import '../../../services/snackbar_service.dart';
-import '../models/app_user.dart';
+import '../models/user_params.dart';
 
 class RegisterNotifier extends BaseChangeNotifier {
   RegisterNotifier(this._read);
@@ -26,11 +26,7 @@ class RegisterNotifier extends BaseChangeNotifier {
     setState(state: AppState.loading);
 
     try {
-      await _read(authenticationRepository).register(
-        fullName: userParams.fullName,
-        emailAddress: userParams.emailAddress.trim(),
-        password: userParams.password!,
-      );
+      await _read(authenticationRepository).register(params: userParams);
 
       _read(navigationService).navigateOffAllNamed(
         Routes.verifyEmail,

@@ -1,3 +1,4 @@
+import 'package:books/src/core/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -8,7 +9,10 @@ class SnackbarService {
     String text,
   ) {
     return scaffoldMessengerKey.currentState!.showSnackBar(
-      SnackBar(content: Text(text)),
+      SnackBar(
+        backgroundColor: AppColors.blueGreen,
+        content: Text(text),
+      ),
     );
   }
 

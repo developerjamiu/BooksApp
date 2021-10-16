@@ -34,8 +34,8 @@ class FavoriteBook {
         averageRatings: snapshot.data()?['averageRatings'],
         description: snapshot.data()?['description'],
         maturityRating: snapshot.data()?['maturityRating'],
-        authors: List<String>.from(snapshot.data()?['authors']),
-        categories: List<String>.from(snapshot.data()?['categories']),
+        authors: List<String>.from(snapshot.data()?['authors'] ?? []),
+        categories: List<String>.from(snapshot.data()?['categories'] ?? []),
         publishedDate: snapshot.data()?['publishedDate'],
         publisher: snapshot.data()?['publisher'],
       );
