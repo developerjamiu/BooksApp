@@ -1,3 +1,4 @@
+import 'package:books/src/core/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -41,7 +42,7 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
             children: [
               const Spacing.smallHeight(),
               Text(
-                'Update Password',
+                AppStrings.updatePassword,
                 style: Theme.of(context).textTheme.headline6,
               ),
               const Spacing.smallHeight(),
@@ -58,7 +59,7 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                             watch(updatePasswordNotifierProvider);
 
                         return AppTextField(
-                          hintText: 'Old Password',
+                          hintText: AppStrings.oldPassword,
                           keyboardType: TextInputType.visiblePassword,
                           controller: oldPasswordController,
                           obscureText: !controller.oldPasswordVisible,
@@ -79,7 +80,7 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                             watch(updatePasswordNotifierProvider);
 
                         return AppTextField(
-                          hintText: 'New Password',
+                          hintText: AppStrings.newPassword,
                           controller: newPasswordController,
                           keyboardType: TextInputType.visiblePassword,
                           obscureText: !controller.newPasswordVisible,
@@ -101,7 +102,7 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                 builder: (_, watch, __) => AppElevatedButton(
                   isLoading:
                       watch(updatePasswordNotifierProvider).state.isLoading,
-                  label: 'Update Password',
+                  label: AppStrings.updatePassword,
                   onPressed: () async {
                     FocusScope.of(context).unfocus();
 

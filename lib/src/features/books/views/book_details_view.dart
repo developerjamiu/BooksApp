@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/constants/dimensions.dart';
+import '../../../core/constants/strings.dart';
 import '../../../core/utilities/model_converter.dart';
 import '../../../widgets/pill.dart';
 import '../../../widgets/spacing.dart';
@@ -128,7 +129,7 @@ class BookDetailsView extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text('Description', style: textTheme.bodyText1),
+                      Text(AppStrings.description, style: textTheme.bodyText1),
                       const Spacing.smallHeight(),
                       Container(
                         decoration: BoxDecoration(
@@ -138,7 +139,8 @@ class BookDetailsView extends StatelessWidget {
                         ),
                         padding: const EdgeInsets.only(left: Dimensions.medium),
                         child: Text(
-                          book.volumeInfo.description ?? 'No Description',
+                          book.volumeInfo.description ??
+                              AppStrings.noDescription,
                           textAlign: TextAlign.justify,
                         ),
                       ),
@@ -148,7 +150,7 @@ class BookDetailsView extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text('Authors', style: textTheme.bodyText1),
+                      Text(AppStrings.authors, style: textTheme.bodyText1),
                       const Spacing.smallHeight(),
                       Row(
                         children: book.volumeInfo.authors == null
@@ -167,7 +169,7 @@ class BookDetailsView extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text('Categories', style: textTheme.bodyText1),
+                      Text(AppStrings.categories, style: textTheme.bodyText1),
                       const Spacing.smallHeight(),
                       Row(
                         children: book.volumeInfo.categories == null
@@ -186,18 +188,25 @@ class BookDetailsView extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text('Publisher', style: textTheme.bodyText1),
+                      Text(AppStrings.publisher, style: textTheme.bodyText1),
                       const Spacing.smallHeight(),
-                      Text(book.volumeInfo.publisher ?? 'Not Available'),
+                      Text(
+                          book.volumeInfo.publisher ?? AppStrings.notAvailable),
                     ],
                   ),
                   const Spacing.mediumHeight(),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text('Published Date', style: textTheme.bodyText1),
+                      Text(
+                        AppStrings.publishedDate,
+                        style: textTheme.bodyText1,
+                      ),
                       const Spacing.smallHeight(),
-                      Text(book.volumeInfo.publishedDate ?? 'Not Available'),
+                      Text(
+                        book.volumeInfo.publishedDate ??
+                            AppStrings.notAvailable,
+                      ),
                     ],
                   ),
                   const Spacing.mediumHeight(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../core/constants/strings.dart';
 import '../../../widgets/statusbar.dart';
 import '../../books/views/books_view.dart';
 import '../../books/views/favorite_books_view.dart';
@@ -30,15 +31,15 @@ class HomeView extends ConsumerWidget {
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
-              label: 'Books',
+              label: AppStrings.books,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.favorite),
-              label: 'Favorite Books',
+              label: AppStrings.favoriteBooks,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person_outline),
-              label: 'Profile',
+              label: AppStrings.profile,
             ),
           ],
         ),

@@ -1,6 +1,8 @@
 import 'package:flutter/painting.dart';
 
 class AppColors {
+  AppColors._();
+
   static const darkBlueGreen = Color(0xFF0C93B4);
   static const blueGreen = Color(0x66008EB1);
 

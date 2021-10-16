@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../core/constants/strings.dart';
 import '../../../core/utilities/base_change_notifier.dart';
 import '../../../core/utilities/validation_extensions.dart';
 import '../../../widgets/app_elevated_button.dart';
@@ -41,7 +42,7 @@ class _UpdateEmailViewState extends State<UpdateEmailView> {
             children: [
               const Spacing.smallHeight(),
               Text(
-                'Update Email Address',
+                AppStrings.updateEmail,
                 style: Theme.of(context).textTheme.headline6,
               ),
               const Spacing.smallHeight(),
@@ -53,7 +54,7 @@ class _UpdateEmailViewState extends State<UpdateEmailView> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     AppTextField(
-                      hintText: 'Email Address',
+                      hintText: AppStrings.emailAddress,
                       controller: emailAddressController,
                       keyboardType: TextInputType.emailAddress,
                       validator: context.validateEmailAddress,
@@ -64,7 +65,7 @@ class _UpdateEmailViewState extends State<UpdateEmailView> {
                         final controller = watch(updateEmailNotifierProvider);
 
                         return AppTextField(
-                          hintText: 'Password',
+                          hintText: AppStrings.password,
                           controller: passwordController,
                           keyboardType: TextInputType.visiblePassword,
                           obscureText: !controller.passwordVisible,
@@ -85,7 +86,7 @@ class _UpdateEmailViewState extends State<UpdateEmailView> {
               Consumer(
                 builder: (_, watch, __) => AppElevatedButton(
                   isLoading: watch(updateEmailNotifierProvider).state.isLoading,
-                  label: 'Update Email',
+                  label: AppStrings.updateEmail,
                   onPressed: () async {
                     FocusScope.of(context).unfocus();
 

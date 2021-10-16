@@ -1,3 +1,4 @@
+import 'package:books/src/core/constants/strings.dart';
 import 'package:books/src/core/routes.dart';
 import 'package:books/src/services/navigation_service.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,7 @@ class BooksView extends HookWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
-                            'Explore thousands of books on the go',
+                            AppStrings.booksHeading,
                             style: Theme.of(context).textTheme.headline4,
                           ),
                           const Spacing.largeHeight(),
@@ -58,7 +59,7 @@ class BooksView extends HookWidget {
                                 children: [
                                   Text(
                                     query == '""'
-                                        ? 'Famous Books'
+                                        ? AppStrings.booksSubHeading
                                         : 'Result for $query',
                                     style:
                                         Theme.of(context).textTheme.headline6,
@@ -138,7 +139,7 @@ class SearchTextField extends StatelessWidget {
           ),
           fillColor: Colors.white,
           filled: true,
-          hintText: 'Search for books...',
+          hintText: AppStrings.searchForBooks,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(32),
             borderSide: BorderSide.none,
@@ -223,7 +224,7 @@ class BookList extends HookWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'No Books to display',
+            AppStrings.noBooks,
             style: Theme.of(context).textTheme.bodyText1,
           ),
         ],
@@ -325,13 +326,13 @@ class BooksErrorView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Error displaying Books',
+          AppStrings.errorBooks,
           style: Theme.of(context).textTheme.bodyText1,
         ),
         const Spacing.bigHeight(),
         ElevatedButton(
           onPressed: () => context.refresh(booksNotifierProvider).getBooks(),
-          child: const Text('Retry'),
+          child: const Text(AppStrings.retry),
         ),
       ],
     );

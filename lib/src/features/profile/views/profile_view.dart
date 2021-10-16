@@ -1,3 +1,4 @@
+import 'package:books/src/core/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -49,7 +50,7 @@ class ProfileView extends ConsumerWidget {
                     Text(user.email!),
                     const Spacing.mediumHeight(),
                     ElevatedButton(
-                      child: const Text('Edit Profile'),
+                      child: const Text(AppStrings.editProfile),
                       style: ElevatedButton.styleFrom(
                         primary: colorScheme.secondary,
                         minimumSize: const Size(140, 40),
@@ -68,8 +69,10 @@ class ProfileView extends ConsumerWidget {
                     const Divider(),
                     const Spacing.bigHeight(),
                     ListTile(
-                      title:
-                          Text('Change Password', style: textTheme.bodyText1),
+                      title: Text(
+                        AppStrings.changePassword,
+                        style: textTheme.bodyText1,
+                      ),
                       trailing: const Icon(Icons.arrow_forward_ios),
                       onTap: () => showDialog(
                         context: context,
@@ -80,7 +83,8 @@ class ProfileView extends ConsumerWidget {
                     ),
                     const Spacing.bigHeight(),
                     ListTile(
-                      title: Text('Change Email', style: textTheme.bodyText1),
+                      title: Text(AppStrings.changeEmail,
+                          style: textTheme.bodyText1),
                       trailing: const Icon(Icons.arrow_forward_ios),
                       onTap: () => showDialog(
                         context: context,
@@ -91,7 +95,7 @@ class ProfileView extends ConsumerWidget {
                     ),
                     const Spacing.largeHeight(),
                     ElevatedButton(
-                      child: const Text('Logout'),
+                      child: const Text(AppStrings.logout),
                       style: ElevatedButton.styleFrom(
                         primary: colorScheme.secondary,
                         minimumSize: const Size(140, 40),

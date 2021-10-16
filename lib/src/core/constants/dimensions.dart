@@ -1,4 +1,6 @@
 class Dimensions {
+  Dimensions._();
+
   static const double zero = 0;
   static const double tiny = 4;
   static const double small = 8;

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../core/constants/strings.dart';
 import '../../../core/utilities/base_change_notifier.dart';
 import '../../../core/utilities/validation_extensions.dart';
 import '../../../widgets/app_elevated_button.dart';
@@ -48,7 +49,7 @@ class _UpdateProfileViewState extends State<UpdateProfileView> {
             children: [
               const Spacing.smallHeight(),
               Text(
-                'Update Profile',
+                AppStrings.updateProfile,
                 style: Theme.of(context).textTheme.headline6,
               ),
               const Spacing.smallHeight(),
@@ -57,8 +58,8 @@ class _UpdateProfileViewState extends State<UpdateProfileView> {
               Form(
                 key: _formKey,
                 child: AppTextField(
-                  hintText: 'Full Name',
-                  labelText: 'Full Name',
+                  hintText: AppStrings.fullName,
+                  labelText: AppStrings.fullName,
                   controller: fullNameController,
                   validator: context.validateFullName,
                 ),
@@ -68,7 +69,7 @@ class _UpdateProfileViewState extends State<UpdateProfileView> {
                 builder: (_, watch, __) => AppElevatedButton(
                   isLoading:
                       watch(updateProfileNotifierProvider).state.isLoading,
-                  label: 'Update Profile',
+                  label: AppStrings.updateProfile,
                   onPressed: () async {
                     FocusScope.of(context).unfocus();
 

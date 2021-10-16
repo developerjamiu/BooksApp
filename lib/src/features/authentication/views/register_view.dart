@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../core/constants/strings.dart';
 import '../../../core/utilities/base_change_notifier.dart';
 import '../../../core/utilities/validation_extensions.dart';
 import '../../../widgets/app_elevated_button.dart';
@@ -41,18 +42,18 @@ class RegisterView extends HookWidget {
                       padding: const EdgeInsets.all(24),
                       children: [
                         Text(
-                          'Register',
+                          AppStrings.register,
                           style: Theme.of(context).textTheme.headline6,
                         ),
                         const Spacing.largeHeight(),
                         AppTextField(
-                          hintText: 'Full Name',
+                          hintText: AppStrings.fullName,
                           controller: fullNameController,
                           validator: context.validateFullName,
                         ),
                         const Spacing.bigHeight(),
                         AppTextField(
-                          hintText: 'Email Address',
+                          hintText: AppStrings.emailAddress,
                           controller: emailAddressController,
                           keyboardType: TextInputType.emailAddress,
                           validator: context.validateEmailAddress,
@@ -64,7 +65,7 @@ class RegisterView extends HookWidget {
                                 watch(registerNotifierProvider);
 
                             return AppTextField(
-                              hintText: 'Password',
+                              hintText: AppStrings.password,
                               controller: passwordController,
                               keyboardType: TextInputType.visiblePassword,
                               obscureText: !loginNotifier.passwordVisible,
@@ -91,7 +92,7 @@ class RegisterView extends HookWidget {
                               isLoading: watch(registerNotifierProvider)
                                   .state
                                   .isLoading,
-                              label: 'Create Account',
+                              label: AppStrings.createAccount,
                               onPressed: () async {
                                 FocusScope.of(context).unfocus();
 
@@ -118,7 +119,7 @@ class RegisterView extends HookWidget {
                                   .read(registerNotifierProvider)
                                   .navigateToLogin();
                             },
-                            child: const Text('Have Account? Login'),
+                            child: const Text(AppStrings.haveAccount),
                           ),
                           const Spacing.smallHeight(),
                         ],

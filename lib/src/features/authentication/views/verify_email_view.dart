@@ -1,3 +1,4 @@
+import 'package:books/src/core/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -28,7 +29,7 @@ class VerifyEmailView extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'Books App',
+                          AppStrings.appName,
                           style: Theme.of(context).textTheme.headline6,
                         ),
                         const Spacing.mediumHeight(),
@@ -39,20 +40,20 @@ class VerifyEmailView extends StatelessWidget {
                         ),
                         const Spacing.bigHeight(),
                         Text(
-                          'Verify your email',
+                          AppStrings.verifyMail,
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
                         const Spacing.smallHeight(),
                         Center(
                           child: Text(
-                            'A verification link has been sent to your email. Please confirm that you want to use this as your account email address. Once it\'s done I\'ll be able to start assisting you.',
+                            AppStrings.verifyMailText,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.subtitle2,
                           ),
                         ),
                         const SizedBox(height: 24),
                         AppElevatedButton(
-                          label: 'Go to Log In',
+                          label: AppStrings.goToLogin,
                           onPressed: () async {
                             await context
                                 .read(verifyEmailNotifierProvider)

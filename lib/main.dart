@@ -1,3 +1,4 @@
+import 'package:books/src/core/constants/strings.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Books',
+      title: AppStrings.appName,
       theme: AppTheme.lightTheme,
       home: const StartupView(),
       onGenerateRoute: Routes.generateRoute,

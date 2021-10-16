@@ -1,16 +1,22 @@
-# books
+# Books App
 
-A new Flutter project.
+App and Up Flutter Take Home Project
 
-## Getting Started
+## Introduction
 
-This project is a starting point for a Flutter application.
+This project is the implementation of the App and Up Flutter Take Home Project.
 
-A few resources to get you started if this is your first Flutter project:
+### Requirements
+-   Authentication with Firebase Authentication (Email + at least one social), design of the required screens is up to you.
+-   Show a list of books gotten from the Google Books API
+-   Allow the user to search for books
+-   Replicate the design given for the page listing the books.
+-   Add a detail page showing the details of the selected book, the design is up to you.
+-   Allow the user to add and remove a book from his favorites by saving it on a Firebase Firestore Database.
+-   BONUS: implement a Firebase Cloud Function doing something you feel worthwhile for the app.
+-   BONUS: handle App responsiveness on the Desktop/Web.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Implementation
+The project was implemented with custom architecture similar to MVVM where
+-   ViewModels are known as modifiers and
+-   Class Dependencies are managed using the Riverpod Providers

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../core/constants/strings.dart';
 import '../../../core/utilities/base_change_notifier.dart';
 import '../../../core/utilities/validation_extensions.dart';
-import '../notifiers/forgot_password_notifier.dart';
 import '../../../widgets/app_elevated_button.dart';
 import '../../../widgets/app_text_field.dart';
 import '../../../widgets/spacing.dart';
+import '../notifiers/forgot_password_notifier.dart';
 
 /// Hook widget is currently causing unexpected behaviour with bottom sheets
 /// So here, a stateful widget is used instead
@@ -41,7 +42,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
             children: [
               const Spacing.smallHeight(),
               Text(
-                'Forgot your password?',
+                AppStrings.forgotPassword,
                 style: Theme.of(context).textTheme.headline6,
               ),
               const Spacing.smallHeight(),
@@ -52,12 +53,10 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Text(
-                      'Confirm your email and we will send you the instructions.',
-                    ),
+                    const Text(AppStrings.forgotPasswordText),
                     const Spacing.largeHeight(),
                     AppTextField(
-                      hintText: 'Email Address',
+                      hintText: AppStrings.emailAddress,
                       controller: emailAddressController,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.done,
@@ -71,7 +70,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                 builder: (_, watch, __) => AppElevatedButton(
                   isLoading:
                       watch(forgotPasswordNotifierProvider).state.isLoading,
-                  label: 'Reset Password',
+                  label: AppStrings.resetPassword,
                   onPressed: () async {
                     FocusScope.of(context).unfocus();
 

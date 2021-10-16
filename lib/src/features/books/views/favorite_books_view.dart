@@ -1,11 +1,10 @@
+import 'package:books/src/core/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/dimensions.dart';
-import '../../../core/routes.dart';
-import '../../../services/navigation_service.dart';
 import '../../../widgets/pill.dart';
 import '../../../widgets/responsive.dart';
 import '../../../widgets/spacing.dart';
@@ -40,7 +39,7 @@ class FavoriteBooksView extends HookWidget {
                         bottom: Dimensions.small,
                       ),
                       child: Text(
-                        'Favorite Books',
+                        AppStrings.favoriteBooks,
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ),
@@ -224,13 +223,13 @@ class BooksErrorView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Error displaying Books',
+            AppStrings.errorBooks,
             style: Theme.of(context).textTheme.bodyText1,
           ),
           const Spacing.bigHeight(),
           ElevatedButton(
             onPressed: () => context.refresh(favoriteBooksProvider),
-            child: const Text('Retry'),
+            child: const Text(AppStrings.retry),
           ),
         ],
       ),

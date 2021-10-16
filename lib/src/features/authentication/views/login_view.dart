@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/constants/images.dart';
+import '../../../core/constants/strings.dart';
 import '../../../core/utilities/base_change_notifier.dart';
 import '../../../core/utilities/validation_extensions.dart';
 import '../../../widgets/app_elevated_button.dart';
@@ -42,12 +43,12 @@ class LoginView extends HookWidget {
                       padding: const EdgeInsets.all(24),
                       children: [
                         Text(
-                          'Login',
+                          AppStrings.login,
                           style: Theme.of(context).textTheme.headline6,
                         ),
                         const Spacing.largeHeight(),
                         AppTextField(
-                          hintText: 'Email Address',
+                          hintText: AppStrings.emailAddress,
                           controller: emailAddressController,
                           keyboardType: TextInputType.emailAddress,
                           validator: context.validateEmailAddress,
@@ -58,7 +59,7 @@ class LoginView extends HookWidget {
                             final loginNotifier = watch(loginNotifierProvider);
 
                             return AppTextField(
-                              hintText: 'Password',
+                              hintText: AppStrings.password,
                               controller: passwordController,
                               keyboardType: TextInputType.visiblePassword,
                               obscureText: !loginNotifier.passwordVisible,
@@ -83,7 +84,7 @@ class LoginView extends HookWidget {
                                 child: ForgotPasswordView(),
                               ),
                             ),
-                            child: const Text('Forgot Password'),
+                            child: const Text(AppStrings.forgotPassword),
                           ),
                         ),
                         const Spacing.smallHeight(),
@@ -98,7 +99,7 @@ class LoginView extends HookWidget {
                             builder: (_, watch, __) => AppElevatedButton(
                               isLoading:
                                   watch(loginNotifierProvider).state.isLoading,
-                              label: 'Login',
+                              label: AppStrings.login,
                               onPressed: () async {
                                 FocusScope.of(context).unfocus();
 
@@ -121,7 +122,7 @@ class LoginView extends HookWidget {
                                 .read(loginNotifierProvider)
                                 .loginUserWithGoogle(),
                             label: Text(
-                              'Sign in with Google',
+                              AppStrings.signinWithGoogle,
                               style: TextStyle(
                                 color:
                                     Theme.of(context).colorScheme.onBackground,
@@ -138,7 +139,7 @@ class LoginView extends HookWidget {
                                   .read(loginNotifierProvider)
                                   .navigateToRegister();
                             },
-                            child: const Text('No Account? Register'),
+                            child: const Text(AppStrings.noAccount),
                           ),
                           const Spacing.smallHeight(),
                         ],
