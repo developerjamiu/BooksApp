@@ -4,8 +4,8 @@ import '../../../core/utilities/base_change_notifier.dart';
 import '../../../repositories/favorite_books_repository.dart';
 import '../models/favorite_book.dart';
 
-class BookDetailsNotitier extends BaseChangeNotifier {
-  BookDetailsNotitier(this._read);
+class FavoriteBooksNotitier extends BaseChangeNotifier {
+  FavoriteBooksNotitier(this._read);
 
   final Reader _read;
 
@@ -38,12 +38,6 @@ class BookDetailsNotitier extends BaseChangeNotifier {
   }
 }
 
-final bookDetailsNotifierProvider = ChangeNotifierProvider(
-  (ref) => BookDetailsNotitier(ref.read),
+final favoriteBooksNotifierProvider = ChangeNotifierProvider(
+  (ref) => FavoriteBooksNotitier(ref.read),
 );
-
-// final isBookFavorite = StreamProvider.family<List<FavoriteBook>, String>(
-//   (ref, bookId) {
-//     return ref.watch(favoriteBooksRepository).bookExists(bookId);
-//   },
-// );

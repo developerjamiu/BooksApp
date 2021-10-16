@@ -8,7 +8,7 @@ import '../../../widgets/pill.dart';
 import '../../../widgets/spacing.dart';
 import '../models/book.dart';
 import '../models/favorite_book.dart';
-import '../notifiers/book_details_notifier.dart';
+import '../notifiers/favorite_books_notifier.dart';
 
 class BookDetailsView extends StatelessWidget {
   final Book book;
@@ -30,7 +30,7 @@ class BookDetailsView extends StatelessWidget {
         actions: [
           Consumer(
             builder: (context, watch, child) {
-              final notifier = watch(bookDetailsNotifierProvider)
+              final notifier = watch(favoriteBooksNotifierProvider)
                 ..checkIsFavorite(book.id);
 
               return IconButton(
@@ -39,7 +39,7 @@ class BookDetailsView extends StatelessWidget {
                       ModelConverter.toFavoriteBook(book);
 
                   context
-                      .read(bookDetailsNotifierProvider)
+                      .read(favoriteBooksNotifierProvider)
                       .addOrRemoveFromFavorite(fBook);
                 },
                 icon: notifier.isFavorite

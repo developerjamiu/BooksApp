@@ -17,12 +17,11 @@ class FavoriteBooksRepository {
     final col = firestore.collection('favorite-books');
 
     return col.snapshots().map(
-          (querySnapshot) => querySnapshot.docs
-              .map(
-                (queryDocumentSnapshot) =>
-                    FavoriteBook.fromDocumentSnapshot(queryDocumentSnapshot),
-              )
-              .toList(),
+          (querySnapshot) => querySnapshot.docs.map(
+            (queryDocumentSnapshot) {
+              return FavoriteBook.fromDocumentSnapshot(queryDocumentSnapshot);
+            },
+          ).toList(),
         );
   }
 

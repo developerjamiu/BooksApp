@@ -29,14 +29,15 @@ class FavoriteBook {
           DocumentSnapshot<Map<String, dynamic>> snapshot) =>
       FavoriteBook(
         id: snapshot.id,
-        title: snapshot.data()?['title'] as String,
-        image: snapshot.data()?['image'] as String,
-        averageRatings: snapshot.data()?['averageRatings'] as int,
-        maturityRating: snapshot.data()?['averageRatings'] as String,
-        authors: snapshot.data()?['authors'] as List<String>,
-        categories: snapshot.data()?['categories'] as List<String>,
-        publishedDate: snapshot.data()?['publishedDate'] as String,
-        publisher: snapshot.data()?['publisher'] as String,
+        title: snapshot.data()?['title'],
+        image: snapshot.data()?['image'],
+        averageRatings: snapshot.data()?['averageRatings'],
+        description: snapshot.data()?['description'],
+        maturityRating: snapshot.data()?['maturityRating'],
+        authors: List<String>.from(snapshot.data()?['authors']),
+        categories: List<String>.from(snapshot.data()?['categories']),
+        publishedDate: snapshot.data()?['publishedDate'],
+        publisher: snapshot.data()?['publisher'],
       );
 
   Map<String, dynamic> toMap() {

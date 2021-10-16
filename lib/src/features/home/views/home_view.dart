@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../widgets/statusbar.dart';
 import '../../books/views/books_view.dart';
+import '../../books/views/favorite_books_view.dart';
 import '../../profile/views/profile_view.dart';
 
 final homeCurrentPageIndex = StateProvider.autoDispose((ref) => 0);
@@ -18,7 +19,7 @@ class HomeView extends ConsumerWidget {
       child: Scaffold(
         body: [
           const BooksView(),
-          const Scaffold(),
+          const FavoriteBooksView(),
           const ProfileView(),
         ][currentPageIndex.state],
         bottomNavigationBar: BottomNavigationBar(
