@@ -1,7 +1,7 @@
-import 'package:books/src/widgets/responsive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../widgets/responsive_dialog.dart';
 import '../../../widgets/spacing.dart';
 import '../../../widgets/statusbar.dart';
 import '../notifiers/profile_notifier.dart';
@@ -23,7 +23,7 @@ class ProfileView extends ConsumerWidget {
       child: Scaffold(
         body: Center(
           child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.7,
+            width: 767,
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: SingleChildScrollView(

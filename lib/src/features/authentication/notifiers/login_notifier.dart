@@ -33,7 +33,7 @@ class LoginNotifier extends BaseChangeNotifier {
         password: password,
       );
 
-      _read(navigationService).navigateOffNamed(Routes.profile);
+      _read(navigationService).navigateOffNamed(Routes.home);
     } on Failure catch (ex) {
       _read(snackbarService).showErrorSnackBar(ex.message);
     } finally {
@@ -46,12 +46,11 @@ class LoginNotifier extends BaseChangeNotifier {
       final user = await _read(authenticationRepository).loginWithGoogle();
 
       if (user != null) {
-        _read(navigationService).navigateOffNamed(Routes.profile);
+        _read(navigationService).navigateOffNamed(Routes.home);
       } else {
         _read(snackbarService).showErrorSnackBar('No email selected');
       }
     } on Failure catch (ex) {
-      print(ex);
       _read(snackbarService).showErrorSnackBar(ex.message);
     } finally {
       setState(state: AppState.idle);

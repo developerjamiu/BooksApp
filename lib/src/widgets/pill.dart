@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/constants/dimensions.dart';
 
 class Pill extends StatelessWidget {
-  final double width;
+  final double? width;
   final String text;
 
   const Pill({
@@ -16,7 +16,10 @@ class Pill extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      padding: const EdgeInsets.all(Dimensions.tiny),
+      padding: const EdgeInsets.symmetric(
+        vertical: Dimensions.tiny,
+        horizontal: Dimensions.small,
+      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: Theme.of(context).colorScheme.secondaryVariant,

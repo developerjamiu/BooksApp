@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -132,8 +133,10 @@ class AuthenticationRepository {
   }
 
   Future<void> logout() async {
+    if (!kIsWeb) {
+      await googleSignIn.signOut();
+    }
     await firebaseAuth.signOut();
-    await googleSignIn.signOut();
   }
 }
 

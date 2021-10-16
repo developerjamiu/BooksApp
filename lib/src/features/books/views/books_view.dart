@@ -1,3 +1,5 @@
+import 'package:books/src/core/routes.dart';
+import 'package:books/src/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -6,6 +8,7 @@ import '../../../core/constants/colors.dart';
 import '../../../core/constants/dimensions.dart';
 import '../../../core/utilities/base_change_notifier.dart';
 import '../../../widgets/pill.dart';
+import '../../../widgets/responsive.dart';
 import '../../../widgets/spacing.dart';
 import '../../../widgets/statusbar.dart';
 import '../models/book.dart';
@@ -23,76 +26,86 @@ class BooksView extends HookWidget {
         body: SafeArea(
           child: GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: Dimensions.big,
-                    right: Dimensions.big,
-                    top: Dimensions.large,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        'Explore thousands of books on the go',
-                        style: Theme.of(context).textTheme.headline4,
+            child: Center(
+              child: SizedBox(
+                width: Responsive.isMobile(context)
+                    ? MediaQuery.of(context).size.width
+                    : MediaQuery.of(context).size.width * 0.9,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: Dimensions.big,
+                        right: Dimensions.big,
+                        top: Dimensions.large,
                       ),
-                      const Spacing.largeHeight(),
-                      SearchTextField(controller: searchController),
-                      const Spacing.largeHeight(),
-                      Consumer(
-                        builder: (context, watch, child) {
-                          final query =
-                              watch(booksNotifierProvider).searchQuery;
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'Explore thousands of books on the go',
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                          const Spacing.largeHeight(),
+                          SearchTextField(controller: searchController),
+                          const Spacing.largeHeight(),
+                          Consumer(
+                            builder: (context, watch, child) {
+                              final query =
+                                  watch(booksNotifierProvider).searchQuery;
 
-                          return Row(
-                            children: [
-                              Text(
-                                query == '""'
-                                    ? 'Famous Books'
-                                    : 'Result for $query',
-                                style: Theme.of(context).textTheme.headline6,
-                              ),
-                              const Spacing.smallWidth(),
-                              query == '""'
-                                  ? const Spacing.empty()
-                                  : GestureDetector(
-                                      onTap: () {
-                                        searchController.clear();
-                                        context
-                                            .read(booksNotifierProvider)
-                                            .getBooks();
-                                      },
-                                      child: const Icon(Icons.cancel),
-                                    )
-                            ],
-                          );
+                              return Row(
+                                children: [
+                                  Text(
+                                    query == '""'
+                                        ? 'Famous Books'
+                                        : 'Result for $query',
+                                    style:
+                                        Theme.of(context).textTheme.headline6,
+                                  ),
+                                  const Spacing.smallWidth(),
+                                  query == '""'
+                                      ? const Spacing.empty()
+                                      : GestureDetector(
+                                          onTap: () {
+                                            searchController.clear();
+                                            context
+                                                .read(booksNotifierProvider)
+                                                .getBooks();
+                                          },
+                                          child: const Icon(Icons.cancel),
+                                        )
+                                ],
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Spacing.smallHeight(),
+                    Expanded(
+                      child: Consumer(
+                        builder: (context, watch, child) {
+                          final booksNotifier = watch(booksNotifierProvider);
+
+                          if (booksNotifier.state.isLoading) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          } else if (booksNotifier.state.isError) {
+                            return const BooksErrorView();
+                          } else {
+                            return BookList(
+                              books: booksNotifier.books,
+                              moreDataAvailable:
+                                  booksNotifier.moreDataAvailable,
+                            );
+                          }
                         },
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                const Spacing.smallHeight(),
-                Expanded(
-                  child: Consumer(
-                    builder: (context, watch, child) {
-                      final booksNotifier = watch(booksNotifierProvider);
-
-                      if (booksNotifier.state.isLoading) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (booksNotifier.state.isError) {
-                        return const BooksErrorView();
-                      } else {
-                        return BookList(
-                          books: booksNotifier.books,
-                          moreDataAvailable: booksNotifier.moreDataAvailable,
-                        );
-                      }
-                    },
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),
@@ -150,6 +163,18 @@ class BookList extends HookWidget {
     required this.moreDataAvailable,
   }) : super(key: key);
 
+  int getCrossAxisCountByPlatform(BuildContext context) {
+    if (Responsive.isTablet(context)) {
+      return 1;
+    } else if (Responsive.isMobile(context)) {
+      return 1;
+    } else if (Responsive.isLaptop(context)) {
+      return 2;
+    } else {
+      return 3;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final booksScrollController = useScrollController();
@@ -175,8 +200,8 @@ class BookList extends HookWidget {
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.all(Dimensions.big),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: getCrossAxisCountByPlatform(context),
             childAspectRatio: 7 / 4,
             mainAxisSpacing: Dimensions.big,
             crossAxisSpacing: Dimensions.big,
@@ -214,66 +239,75 @@ class BookListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(Dimensions.small),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [AppColors.defaultShadow],
-        color: Theme.of(context).colorScheme.surface,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 4,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: Colors.green.shade50,
-              ),
-              height: double.infinity,
-              child: book.volumeInfo.imageLinks == null
-                  ? const Spacing.empty()
-                  : ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Image.network(
-                        book.volumeInfo.imageLinks!.thumbnail,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-            ),
+    return GestureDetector(
+      onTap: () => context.read(navigationService).navigateToNamed(
+            Routes.bookDetails,
+            arguments: book,
           ),
-          const Spacing.mediumWidth(),
-          Expanded(
-            flex: 7,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                book.volumeInfo.authors == null
+      child: Container(
+        padding: const EdgeInsets.all(Dimensions.small),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: const [AppColors.defaultShadow],
+          color: Theme.of(context).colorScheme.surface,
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 4,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: Colors.green.shade50,
+                ),
+                height: double.infinity,
+                child: book.volumeInfo.imageLinks == null
                     ? const Spacing.empty()
-                    : Text(book.volumeInfo.authors![0]),
-                const Spacing.height(12),
-                Text(
-                  book.volumeInfo.title,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                const Spacing.height(12),
-                Row(
-                  children: [
-                    const Icon(Icons.star, color: Colors.amber, size: 16),
-                    const Spacing.smallWidth(),
-                    Text((book.volumeInfo.averageRating ?? 0).toString()),
-                  ],
-                ),
-                const Spacing.height(12),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Pill(text: book.volumeInfo.maturityRating),
-                ),
-              ],
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: Image.network(
+                          book.volumeInfo.imageLinks!.thumbnail,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+              ),
             ),
-          ),
-        ],
+            const Spacing.mediumWidth(),
+            Expanded(
+              flex: 7,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Spacer(flex: 3),
+                  book.volumeInfo.authors == null
+                      ? const Spacing.empty()
+                      : Text(book.volumeInfo.authors![0]),
+                  const Spacer(),
+                  Text(
+                    book.volumeInfo.title,
+                    style: Theme.of(context).textTheme.bodyText1,
+                    maxLines: 3,
+                  ),
+                  const Spacer(),
+                  Row(
+                    children: [
+                      const Icon(Icons.star, color: Colors.amber, size: 16),
+                      const Spacing.smallWidth(),
+                      Text((book.volumeInfo.averageRating ?? 0).toString()),
+                    ],
+                  ),
+                  const Spacer(),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Pill(text: book.volumeInfo.maturityRating),
+                  ),
+                  const Spacer(flex: 3),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

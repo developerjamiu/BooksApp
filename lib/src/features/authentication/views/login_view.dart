@@ -1,5 +1,3 @@
-import 'package:books/src/widgets/responsive.dart';
-import 'package:books/src/widgets/responsive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -9,6 +7,7 @@ import '../../../core/utilities/base_change_notifier.dart';
 import '../../../core/utilities/validation_extensions.dart';
 import '../../../widgets/app_elevated_button.dart';
 import '../../../widgets/app_text_field.dart';
+import '../../../widgets/responsive_dialog.dart';
 import '../../../widgets/spacing.dart';
 import '../../../widgets/statusbar.dart';
 import '../notifiers/login_notifier.dart';
@@ -23,8 +22,6 @@ class LoginView extends HookWidget {
   Widget build(BuildContext context) {
     final emailAddressController = useTextEditingController();
     final passwordController = useTextEditingController();
-
-    final screenWidth = MediaQuery.of(context).size.width;
 
     return Statusbar(
       child: Scaffold(
@@ -77,19 +74,12 @@ class LoginView extends HookWidget {
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (_) => const ResponsiveDialog(
-                                child: ForgotPasswordView(),
-                              ),
-                            );
-                            // showModalBottomSheet(
-                            //   isScrollControlled: true,
-                            //   context: context,
-                            //   builder: (_) => const ForgotPasswordView(),
-                            // );
-                          },
+                          onPressed: () => showDialog(
+                            context: context,
+                            builder: (_) => const ResponsiveDialog(
+                              child: ForgotPasswordView(),
+                            ),
+                          ),
                           child: const Text('Forgot Password'),
                         ),
                       ),

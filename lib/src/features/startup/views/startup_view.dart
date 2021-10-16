@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../authentication/views/login_view.dart';
-import '../../profile/views/profile_view.dart';
+import '../../home/views/home_view.dart';
 import '../notifiers/startup_notifier.dart';
 
 class StartupView extends StatelessWidget {
@@ -13,7 +13,7 @@ class StartupView extends StatelessWidget {
     if (context.read(startupNotifierProvider).currentUser == null) {
       return LoginView();
     } else {
-      return const ProfileView();
+      return const HomeView();
     }
   }
 }
