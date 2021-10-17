@@ -5,9 +5,13 @@ import '../../../repositories/favorite_books_repository.dart';
 import '../models/favorite_book.dart';
 
 class FavoriteBooksNotitier extends BaseChangeNotifier {
-  FavoriteBooksNotitier(this._read);
+  FavoriteBooksNotitier(this._read, {required this.bookId}) {
+    checkIsFavorite(bookId);
+  }
 
   final Reader _read;
+
+  final String bookId;
 
   bool _isFavorite = false;
   bool get isFavorite => _isFavorite;
@@ -38,6 +42,7 @@ class FavoriteBooksNotitier extends BaseChangeNotifier {
   }
 }
 
-final favoriteBooksNotifierProvider = ChangeNotifierProvider(
-  (ref) => FavoriteBooksNotitier(ref.read),
+final favoriteBooksNotifierProvider =
+    ChangeNotifierProvider.family<FavoriteBooksNotitier, String>(
+  (ref, bookId) => FavoriteBooksNotitier(ref.read, bookId: bookId),
 );

@@ -193,7 +193,7 @@ class BookListItem extends StatelessWidget {
                     IconButton(
                       onPressed: () {
                         context
-                            .read(favoriteBooksNotifierProvider)
+                            .read(favoriteBooksNotifierProvider(book.id))
                             .addOrRemoveFromFavorite(book);
                       },
                       icon: const Icon(Icons.delete),

@@ -39,6 +39,6 @@ class UpdateProfileNotifier extends BaseChangeNotifier {
   }
 }
 
-final updateProfileNotifierProvider = ChangeNotifierProvider(
+final updateProfileNotifierProvider = ChangeNotifierProvider.autoDispose(
   (ref) => UpdateProfileNotifier(ref.read),
 );

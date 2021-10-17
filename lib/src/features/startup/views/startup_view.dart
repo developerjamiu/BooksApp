@@ -5,12 +5,12 @@ import '../../authentication/views/login_view.dart';
 import '../../home/views/home_view.dart';
 import '../notifiers/startup_notifier.dart';
 
-class StartupView extends StatelessWidget {
+class StartupView extends ConsumerWidget {
   const StartupView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    if (context.read(startupNotifierProvider).currentUser == null) {
+  Widget build(BuildContext context, ScopedReader watch) {
+    if (watch(startupNotifierProvider).currentUser == null) {
       return LoginView();
     } else {
       return const HomeView();

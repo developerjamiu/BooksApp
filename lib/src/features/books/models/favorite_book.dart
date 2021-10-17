@@ -11,6 +11,7 @@ class FavoriteBook {
   final List<String>? categories;
   final String? publisher;
   final String? publishedDate;
+  final String? userId;
 
   FavoriteBook({
     required this.id,
@@ -18,11 +19,12 @@ class FavoriteBook {
     this.image,
     this.averageRatings,
     required this.maturityRating,
-    this.description = 'No Description',
+    this.description,
     this.authors,
     this.categories,
     this.publisher,
     this.publishedDate,
+    this.userId,
   });
 
   factory FavoriteBook.fromDocumentSnapshot(
@@ -38,6 +40,7 @@ class FavoriteBook {
         categories: List<String>.from(snapshot.data()?['categories'] ?? []),
         publishedDate: snapshot.data()?['publishedDate'],
         publisher: snapshot.data()?['publisher'],
+        userId: snapshot.data()?['userId'],
       );
 
   Map<String, dynamic> toMap() {

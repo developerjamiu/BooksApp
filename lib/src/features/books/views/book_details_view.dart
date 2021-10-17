@@ -31,8 +31,7 @@ class BookDetailsView extends StatelessWidget {
         actions: [
           Consumer(
             builder: (context, watch, child) {
-              final notifier = watch(favoriteBooksNotifierProvider)
-                ..checkIsFavorite(book.id);
+              final notifier = watch(favoriteBooksNotifierProvider(book.id));
 
               return IconButton(
                 onPressed: () {
@@ -40,7 +39,7 @@ class BookDetailsView extends StatelessWidget {
                       ModelConverter.toFavoriteBook(book);
 
                   context
-                      .read(favoriteBooksNotifierProvider)
+                      .read(favoriteBooksNotifierProvider(book.id))
                       .addOrRemoveFromFavorite(fBook);
                 },
                 icon: notifier.isFavorite

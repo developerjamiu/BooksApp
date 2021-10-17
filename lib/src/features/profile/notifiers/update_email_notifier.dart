@@ -48,6 +48,6 @@ class UpdateEmailNotifier extends BaseChangeNotifier {
   }
 }
 
-final updateEmailNotifierProvider = ChangeNotifierProvider(
+final updateEmailNotifierProvider = ChangeNotifierProvider.autoDispose(
   (ref) => UpdateEmailNotifier(ref.read),
 );

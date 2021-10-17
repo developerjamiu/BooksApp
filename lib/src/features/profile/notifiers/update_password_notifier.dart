@@ -51,6 +51,6 @@ class UpdatePasswordNotifier extends BaseChangeNotifier {
   }
 }
 
-final updatePasswordNotifierProvider = ChangeNotifierProvider(
+final updatePasswordNotifierProvider = ChangeNotifierProvider.autoDispose(
   (ref) => UpdatePasswordNotifier(ref.read),
 );

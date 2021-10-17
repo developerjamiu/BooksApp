@@ -6,17 +6,21 @@ import 'authentication_repository.dart';
 
 class FavoriteBooksRepository {
   FavoriteBooksRepository({
-    required this.userId,
+    required this.authenticationRepository,
     required this.firestore,
   });
 
-  final String userId;
+  final AuthenticationRepository authenticationRepository;
   final FirebaseFirestore firestore;
 
-  Stream<List<FavoriteBook>> getFavoriteBooks() {
-    final col = firestore.collection('favorite-books');
+  CollectionReference<Map<String, dynamic>> get favoriteBooksCollection =>
+      firestore
+          .collection("users")
+          .doc(authenticationRepository.currentUser!.uid)
+          .collection('favorite-books');
 
-    return col.snapshots().map(
+  Stream<List<FavoriteBook>> getFavoriteBooks() {
+    return favoriteBooksCollection.snapshots().map(
           (querySnapshot) => querySnapshot.docs.map(
             (queryDocumentSnapshot) {
               return FavoriteBook.fromDocumentSnapshot(queryDocumentSnapshot);
@@ -26,32 +30,23 @@ class FavoriteBooksRepository {
   }
 
   Future<bool> bookExists(String bookId) async {
-    final col = firestore.collection('favorite-books');
-
-    final snapshot = await col.doc(bookId).get();
+    final snapshot = await favoriteBooksCollection.doc(bookId).get();
 
     return snapshot.exists;
   }
 
   Future<void> addBookToFavorite(FavoriteBook book) async {
-    final col = firestore.collection('favorite-books');
-
-    return await col.doc(book.id).set({
-      'userId': userId,
-      ...book.toMap(),
-    });
+    return await favoriteBooksCollection.doc(book.id).set(book.toMap());
   }
 
   Future<void> removeBookFromFavorite(FavoriteBook book) async {
-    final col = firestore.collection('favorite-books');
-
-    return await col.doc(book.id).delete();
+    return await favoriteBooksCollection.doc(book.id).delete();
   }
 }
 
 final favoriteBooksRepository = Provider(
   (ref) => FavoriteBooksRepository(
-    userId: ref.watch(authenticationRepository).currentUser!.uid,
+    authenticationRepository: ref.watch(authenticationRepository),
     firestore: FirebaseFirestore.instance,
   ),
 );
