@@ -94,17 +94,35 @@ class ProfileView extends ConsumerWidget {
                       ),
                     ),
                     const Spacing.largeHeight(),
-                    ElevatedButton(
-                      child: const Text(AppStrings.logout),
-                      style: ElevatedButton.styleFrom(
-                        primary: colorScheme.secondary,
-                        minimumSize: const Size(140, 40),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          child: const Text(AppStrings.logout),
+                          style: ElevatedButton.styleFrom(
+                            primary: colorScheme.secondary,
+                            minimumSize: const Size(140, 40),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          onPressed:
+                              context.read(profileNotifierProvider).logoutUser,
                         ),
-                      ),
-                      onPressed:
-                          context.read(profileNotifierProvider).logoutUser,
+                        const Spacing.mediumWidth(),
+                        ElevatedButton(
+                          child: const Text(AppStrings.deleteAccount),
+                          style: ElevatedButton.styleFrom(
+                            primary: colorScheme.secondary,
+                            minimumSize: const Size(140, 40),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          onPressed:
+                              context.read(profileNotifierProvider).deleteUser,
+                        ),
+                      ],
                     ),
                   ],
                 ),

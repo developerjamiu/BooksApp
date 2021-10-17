@@ -1,8 +1,8 @@
-import 'package:books/src/core/constants/strings.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'src/core/constants/strings.dart';
 import 'src/core/routes.dart';
 import 'src/core/theme.dart';
 import 'src/features/startup/views/startup_view.dart';

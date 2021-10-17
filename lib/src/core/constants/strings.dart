@@ -48,6 +48,7 @@ class AppStrings {
   static const changeEmail = 'Change Email';
   static const changePassword = 'Change Password';
   static const logout = 'Logout';
+  static const deleteAccount = 'Delete Account';
   static const updateEmail = 'Update Email Address';
   static const updatePassword = 'Update Password';
   static const oldPassword = 'Old Password';

@@ -1,13 +1,13 @@
-import 'package:books/src/core/constants/strings.dart';
-import 'package:books/src/core/routes.dart';
-import 'package:books/src/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/dimensions.dart';
+import '../../../core/constants/strings.dart';
+import '../../../core/routes.dart';
 import '../../../core/utilities/base_change_notifier.dart';
+import '../../../services/navigation_service.dart';
 import '../../../widgets/pill.dart';
 import '../../../widgets/responsive.dart';
 import '../../../widgets/spacing.dart';

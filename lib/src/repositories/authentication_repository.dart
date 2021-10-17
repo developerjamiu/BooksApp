@@ -1,3 +1,4 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -9,10 +10,12 @@ import '../services/base/failure.dart';
 class AuthenticationRepository {
   AuthenticationRepository({
     required this.firebaseAuth,
+    required this.firebaseFunctions,
     required this.googleSignIn,
   });
 
   final FirebaseAuth firebaseAuth;
+  final FirebaseFunctions firebaseFunctions;
   final GoogleSignIn googleSignIn;
 
   User? get currentUser => firebaseAuth.currentUser;
@@ -25,6 +28,9 @@ class AuthenticationRepository {
         password: params.password,
       );
 
+      // I'm not creating a new user on firestore and using this instead
+      // because all I have to store is full name and the firebase auth user
+      // object is faster to access
       _userCredential.user!.updateDisplayName(params.fullName);
 
       await _userCredential.user!.sendEmailVerification();
@@ -129,6 +135,23 @@ class AuthenticationRepository {
     }
   }
 
+  Future<String> deleteUser() async {
+    try {
+      final HttpsCallable callable = firebaseFunctions.httpsCallable(
+        'deleteUserAccount',
+        options: HttpsCallableOptions(timeout: const Duration(seconds: 10)),
+      );
+
+      final result = await callable();
+
+      logout();
+
+      return result.data;
+    } on FirebaseFunctionsException catch (ex) {
+      throw Failure(ex.message ?? 'Something went wrong!');
+    }
+  }
+
   Future<void> logout() async {
     if (!kIsWeb) {
       await googleSignIn.signOut();
@@ -140,6 +163,7 @@ class AuthenticationRepository {
 final authenticationRepository = Provider(
   (ref) => AuthenticationRepository(
     firebaseAuth: FirebaseAuth.instance,
+    firebaseFunctions: FirebaseFunctions.instance,
     googleSignIn: GoogleSignIn(),
   ),
 );
