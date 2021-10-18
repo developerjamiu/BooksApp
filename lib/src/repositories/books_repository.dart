@@ -17,10 +17,8 @@ class BooksRepository {
     int currentPage = 1,
     int pageSize = 20,
   }) async {
-    const apiKey = APIData.apiKey;
     final offSet = (currentPage - 1) * pageSize;
-    final query =
-        'q=$queryString&startIndex=$offSet&maxResults=$pageSize&key=$apiKey';
+    final query = 'q=$queryString&startIndex=$offSet&maxResults=$pageSize';
 
     final uri = APIData.fetchBooks(query: query);
 
