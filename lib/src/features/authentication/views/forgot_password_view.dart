@@ -67,15 +67,15 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
               ),
               const Spacing.largeHeight(),
               Consumer(
-                builder: (_, watch, __) => AppElevatedButton(
+                builder: (_, ref, __) => AppElevatedButton(
                   isLoading:
-                      watch(forgotPasswordNotifierProvider).state.isLoading,
+                      ref.watch(forgotPasswordNotifierProvider).state.isLoading,
                   label: AppStrings.resetPassword,
                   onPressed: () async {
                     FocusScope.of(context).unfocus();
 
                     if (_formKey.currentState!.validate()) {
-                      await context
+                      await ref
                           .read(forgotPasswordNotifierProvider)
                           .resetPassword(emailAddressController.text.trim());
                     }

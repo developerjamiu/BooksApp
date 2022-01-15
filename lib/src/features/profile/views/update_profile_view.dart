@@ -66,15 +66,15 @@ class _UpdateProfileViewState extends State<UpdateProfileView> {
               ),
               const Spacing.largeHeight(),
               Consumer(
-                builder: (_, watch, __) => AppElevatedButton(
+                builder: (_, ref, __) => AppElevatedButton(
                   isLoading:
-                      watch(updateProfileNotifierProvider).state.isLoading,
+                      ref.watch(updateProfileNotifierProvider).state.isLoading,
                   label: AppStrings.updateProfile,
                   onPressed: () async {
                     FocusScope.of(context).unfocus();
 
                     if (_formKey.currentState!.validate()) {
-                      await context
+                      await ref
                           .read(updateProfileNotifierProvider)
                           .updateProfile(fullNameController.text);
                     }

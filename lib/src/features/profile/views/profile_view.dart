@@ -1,7 +1,7 @@
-import 'package:books/src/core/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../core/constants/strings.dart';
 import '../../../widgets/responsive_dialog.dart';
 import '../../../widgets/spacing.dart';
 import '../../../widgets/statusbar.dart';
@@ -14,8 +14,8 @@ class ProfileView extends ConsumerWidget {
   const ProfileView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final user = watch(profileNotifierProvider).user;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(profileNotifierProvider).user;
 
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
@@ -107,7 +107,7 @@ class ProfileView extends ConsumerWidget {
                             ),
                           ),
                           onPressed:
-                              context.read(profileNotifierProvider).logoutUser,
+                              ref.read(profileNotifierProvider).logoutUser,
                         ),
                         const Spacing.mediumWidth(),
                         ElevatedButton(
@@ -120,7 +120,7 @@ class ProfileView extends ConsumerWidget {
                             ),
                           ),
                           onPressed:
-                              context.read(profileNotifierProvider).deleteUser,
+                              ref.read(profileNotifierProvider).deleteUser,
                         ),
                       ],
                     ),

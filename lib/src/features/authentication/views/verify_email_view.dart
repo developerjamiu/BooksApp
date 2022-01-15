@@ -1,17 +1,17 @@
-import 'package:books/src/core/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../core/constants/strings.dart';
 import '../../../widgets/app_elevated_button.dart';
 import '../../../widgets/spacing.dart';
 import '../../../widgets/statusbar.dart';
 import '../notifiers/verify_email_notifier.dart';
 
-class VerifyEmailView extends StatelessWidget {
+class VerifyEmailView extends ConsumerWidget {
   const VerifyEmailView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Statusbar(
       child: Scaffold(
         body: SafeArea(
@@ -55,7 +55,7 @@ class VerifyEmailView extends StatelessWidget {
                         AppElevatedButton(
                           label: AppStrings.goToLogin,
                           onPressed: () async {
-                            await context
+                            await ref
                                 .read(verifyEmailNotifierProvider)
                                 .navigateToLogin();
                           },

@@ -51,9 +51,9 @@ class BooksView extends HookWidget {
                           SearchTextField(controller: searchController),
                           const Spacing.largeHeight(),
                           Consumer(
-                            builder: (context, watch, child) {
+                            builder: (context, ref, child) {
                               final query =
-                                  watch(booksNotifierProvider).searchQuery;
+                                  ref.watch(booksNotifierProvider).searchQuery;
 
                               return Row(
                                 children: [
@@ -70,7 +70,7 @@ class BooksView extends HookWidget {
                                       : GestureDetector(
                                           onTap: () {
                                             searchController.clear();
-                                            context
+                                            ref
                                                 .read(booksNotifierProvider)
                                                 .getBooks();
                                           },
@@ -86,8 +86,9 @@ class BooksView extends HookWidget {
                     const Spacing.smallHeight(),
                     Expanded(
                       child: Consumer(
-                        builder: (context, watch, child) {
-                          final booksNotifier = watch(booksNotifierProvider);
+                        builder: (context, ref, child) {
+                          final booksNotifier =
+                              ref.watch(booksNotifierProvider);
 
                           if (booksNotifier.state.isLoading) {
                             return const Center(
@@ -115,13 +116,13 @@ class BooksView extends HookWidget {
   }
 }
 
-class SearchTextField extends StatelessWidget {
+class SearchTextField extends ConsumerWidget {
   final TextEditingController controller;
 
   const SearchTextField({Key? key, required this.controller}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       decoration: const BoxDecoration(
         boxShadow: [AppColors.defaultShadow],
@@ -130,7 +131,7 @@ class SearchTextField extends StatelessWidget {
         controller: controller,
         textInputAction: TextInputAction.search,
         onSubmitted: (text) =>
-            context.read(booksNotifierProvider).getBooks(query: text),
+            ref.read(booksNotifierProvider).getBooks(query: text),
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.only(
             top: 24,
@@ -154,7 +155,7 @@ class SearchTextField extends StatelessWidget {
   }
 }
 
-class BookList extends HookWidget {
+class BookList extends HookConsumerWidget {
   final List<Book> books;
   final bool moreDataAvailable;
 
@@ -177,14 +178,14 @@ class BookList extends HookWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final booksScrollController = useScrollController();
 
     useEffect(() {
       void scrollListener() {
         if (booksScrollController.position.pixels ==
             booksScrollController.position.maxScrollExtent) {
-          context.read(booksNotifierProvider).getMoreBooks();
+          ref.read(booksNotifierProvider).getMoreBooks();
         }
       }
 
@@ -195,7 +196,7 @@ class BookList extends HookWidget {
 
     if (books.isNotEmpty) {
       return RefreshIndicator(
-        onRefresh: () => context.read(booksNotifierProvider).getBooks(),
+        onRefresh: () => ref.read(booksNotifierProvider).getBooks(),
         child: GridView.builder(
           controller: booksScrollController,
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -233,15 +234,15 @@ class BookList extends HookWidget {
   }
 }
 
-class BookListItem extends StatelessWidget {
+class BookListItem extends ConsumerWidget {
   final Book book;
 
   const BookListItem({Key? key, required this.book}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: () => context.read(navigationService).navigateToNamed(
+      onTap: () => ref.read(navigationService).navigateToNamed(
             Routes.bookDetails,
             arguments: book,
           ),
@@ -315,13 +316,13 @@ class BookListItem extends StatelessWidget {
   }
 }
 
-class BooksErrorView extends StatelessWidget {
+class BooksErrorView extends ConsumerWidget {
   const BooksErrorView({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -331,7 +332,7 @@ class BooksErrorView extends StatelessWidget {
         ),
         const Spacing.bigHeight(),
         ElevatedButton(
-          onPressed: () => context.refresh(booksNotifierProvider).getBooks(),
+          onPressed: () => ref.refresh(booksNotifierProvider).getBooks(),
           child: const Text(AppStrings.retry),
         ),
       ],
