@@ -1,7 +1,7 @@
-import 'package:books/src/core/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../core/constants/strings.dart';
 import '../../../core/utilities/base_change_notifier.dart';
 import '../../../core/utilities/validation_extensions.dart';
 import '../../../widgets/app_elevated_button.dart';
@@ -54,9 +54,9 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Consumer(
-                      builder: (_, ScopedReader watch, __) {
+                      builder: (_, WidgetRef ref, __) {
                         final controller =
-                            watch(updatePasswordNotifierProvider);
+                            ref.watch(updatePasswordNotifierProvider);
 
                         return AppTextField(
                           hintText: AppStrings.oldPassword,
@@ -75,9 +75,9 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                     ),
                     const Spacing.bigHeight(),
                     Consumer(
-                      builder: (_, ScopedReader watch, __) {
+                      builder: (_, WidgetRef ref, __) {
                         final controller =
-                            watch(updatePasswordNotifierProvider);
+                            ref.watch(updatePasswordNotifierProvider);
 
                         return AppTextField(
                           hintText: AppStrings.newPassword,
@@ -99,15 +99,15 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
               ),
               const Spacing.largeHeight(),
               Consumer(
-                builder: (_, watch, __) => AppElevatedButton(
+                builder: (_, ref, __) => AppElevatedButton(
                   isLoading:
-                      watch(updatePasswordNotifierProvider).state.isLoading,
+                      ref.watch(updatePasswordNotifierProvider).state.isLoading,
                   label: AppStrings.updatePassword,
                   onPressed: () async {
                     FocusScope.of(context).unfocus();
 
                     if (_formKey.currentState!.validate()) {
-                      await context
+                      await ref
                           .read(updatePasswordNotifierProvider)
                           .updatePassword(
                             oldPasswordController.text,

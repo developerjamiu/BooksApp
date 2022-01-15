@@ -9,8 +9,8 @@ class StartupView extends ConsumerWidget {
   const StartupView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    if (watch(startupNotifierProvider).currentUser == null) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (ref.watch(startupNotifierProvider).currentUser == null) {
       return LoginView();
     } else {
       return const HomeView();

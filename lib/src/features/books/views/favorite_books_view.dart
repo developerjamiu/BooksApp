@@ -1,10 +1,9 @@
-import 'package:books/src/core/constants/strings.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/dimensions.dart';
+import '../../../core/constants/strings.dart';
 import '../../../widgets/pill.dart';
 import '../../../widgets/responsive.dart';
 import '../../../widgets/spacing.dart';
@@ -13,11 +12,11 @@ import '../models/favorite_book.dart';
 import '../notifiers/favorite_books_notifier.dart';
 import '../providers/favorite_books_provider.dart';
 
-class FavoriteBooksView extends HookWidget {
+class FavoriteBooksView extends HookConsumerWidget {
   const FavoriteBooksView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Statusbar(
       child: Scaffold(
         body: SafeArea(
@@ -47,7 +46,8 @@ class FavoriteBooksView extends HookWidget {
                     Expanded(
                       child: Consumer(
                         builder: (context, watch, child) {
-                          final favoriteBooks = watch(favoriteBooksProvider);
+                          final favoriteBooks =
+                              ref.watch(favoriteBooksProvider);
 
                           return favoriteBooks.when(
                             data: (data) => BookList(books: data),
@@ -70,7 +70,7 @@ class FavoriteBooksView extends HookWidget {
   }
 }
 
-class BookList extends HookWidget {
+class BookList extends HookConsumerWidget {
   final List<FavoriteBook> books;
 
   const BookList({Key? key, required this.books}) : super(key: key);
@@ -88,10 +88,10 @@ class BookList extends HookWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     if (books.isNotEmpty) {
       return RefreshIndicator(
-        onRefresh: () async => context.refresh(favoriteBooksProvider),
+        onRefresh: () async => ref.refresh(favoriteBooksProvider),
         child: GridView.builder(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           physics: const BouncingScrollPhysics(),
@@ -122,13 +122,13 @@ class BookList extends HookWidget {
   }
 }
 
-class BookListItem extends StatelessWidget {
+class BookListItem extends ConsumerWidget {
   final FavoriteBook book;
 
   const BookListItem({Key? key, required this.book}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       padding: const EdgeInsets.all(Dimensions.small),
       decoration: BoxDecoration(
@@ -192,7 +192,7 @@ class BookListItem extends StatelessWidget {
                     const Spacer(),
                     IconButton(
                       onPressed: () {
-                        context
+                        ref
                             .read(favoriteBooksNotifierProvider(book.id))
                             .addOrRemoveFromFavorite(book);
                       },
@@ -210,13 +210,13 @@ class BookListItem extends StatelessWidget {
   }
 }
 
-class BooksErrorView extends StatelessWidget {
+class BooksErrorView extends ConsumerWidget {
   const BooksErrorView({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.all(24.0),
       child: Column(
@@ -228,7 +228,7 @@ class BooksErrorView extends StatelessWidget {
           ),
           const Spacing.bigHeight(),
           ElevatedButton(
-            onPressed: () => context.refresh(favoriteBooksProvider),
+            onPressed: () => ref.refresh(favoriteBooksProvider),
             child: const Text(AppStrings.retry),
           ),
         ],

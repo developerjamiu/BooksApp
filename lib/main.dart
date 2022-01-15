@@ -17,19 +17,19 @@ void main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: AppStrings.appName,
       theme: AppTheme.lightTheme,
       home: const StartupView(),
       onGenerateRoute: Routes.generateRoute,
-      navigatorKey: context.read(navigationService).navigatorKey,
-      scaffoldMessengerKey: context.read(snackbarService).scaffoldMessengerKey,
+      navigatorKey: ref.read(navigationService).navigatorKey,
+      scaffoldMessengerKey: ref.read(snackbarService).scaffoldMessengerKey,
     );
   }
 }

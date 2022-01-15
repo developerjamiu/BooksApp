@@ -12,8 +12,8 @@ class HomeView extends ConsumerWidget {
   const HomeView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final currentPageIndex = watch(homeCurrentPageIndex);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentPageIndex = ref.watch(homeCurrentPageIndex.notifier);
 
     return Statusbar(
       child: Scaffold(

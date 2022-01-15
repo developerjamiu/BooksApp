@@ -12,13 +12,15 @@ import '../../../widgets/statusbar.dart';
 import '../models/user_params.dart';
 import '../notifiers/register_notifier.dart';
 
-class RegisterView extends HookWidget {
+class RegisterView extends HookConsumerWidget {
   RegisterView({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final registerNotifier = ref.watch(registerNotifierProvider);
+
     final fullNameController = useTextEditingController();
     final emailAddressController = useTextEditingController();
     final passwordController = useTextEditingController();
@@ -59,26 +61,19 @@ class RegisterView extends HookWidget {
                           validator: context.validateEmailAddress,
                         ),
                         const Spacing.bigHeight(),
-                        Consumer(
-                          builder: (context, watch, child) {
-                            final loginNotifier =
-                                watch(registerNotifierProvider);
-
-                            return AppTextField(
-                              hintText: AppStrings.password,
-                              controller: passwordController,
-                              keyboardType: TextInputType.visiblePassword,
-                              obscureText: !loginNotifier.passwordVisible,
-                              suffixIcon: IconButton(
-                                icon: loginNotifier.passwordVisible
-                                    ? const Icon(Icons.visibility_off)
-                                    : const Icon(Icons.visibility),
-                                onPressed:
-                                    loginNotifier.togglePasswordVisibility,
-                              ),
-                              validator: context.validatePassword,
-                            );
-                          },
+                        AppTextField(
+                          hintText: AppStrings.password,
+                          controller: passwordController,
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: !registerNotifier.passwordVisible,
+                          suffixIcon: IconButton(
+                            icon: registerNotifier.passwordVisible
+                                ? const Icon(Icons.visibility_off)
+                                : const Icon(Icons.visibility),
+                            onPressed:
+                                registerNotifier.togglePasswordVisibility,
+                          ),
+                          validator: context.validatePassword,
                         ),
                       ],
                     ),
@@ -87,38 +82,31 @@ class RegisterView extends HookWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: Column(
                         children: [
-                          Consumer(
-                            builder: (_, watch, __) => AppElevatedButton(
-                              isLoading: watch(registerNotifierProvider)
-                                  .state
-                                  .isLoading,
-                              label: AppStrings.createAccount,
-                              onPressed: () async {
-                                FocusScope.of(context).unfocus();
+                          AppElevatedButton(
+                            isLoading: registerNotifier.state.isLoading,
+                            label: AppStrings.createAccount,
+                            onPressed: () async {
+                              FocusScope.of(context).unfocus();
 
-                                if (_formKey.currentState!.validate()) {
-                                  await context
-                                      .read(registerNotifierProvider)
-                                      .registerUser(
-                                        userParams: UserParams(
-                                          fullName: fullNameController.text,
-                                          emailAddress: emailAddressController
-                                              .text
-                                              .trim(),
-                                          password: passwordController.text,
-                                        ),
-                                      );
-                                }
-                              },
-                            ),
+                              if (_formKey.currentState!.validate()) {
+                                await ref
+                                    .read(registerNotifierProvider)
+                                    .registerUser(
+                                      userParams: UserParams(
+                                        fullName: fullNameController.text,
+                                        emailAddress:
+                                            emailAddressController.text.trim(),
+                                        password: passwordController.text,
+                                      ),
+                                    );
+                              }
+                            },
                           ),
                           const Spacing.smallHeight(),
                           TextButton(
-                            onPressed: () {
-                              context
-                                  .read(registerNotifierProvider)
-                                  .navigateToLogin();
-                            },
+                            onPressed: () => ref
+                                .read(registerNotifierProvider)
+                                .navigateToLogin(),
                             child: const Text(AppStrings.haveAccount),
                           ),
                           const Spacing.smallHeight(),

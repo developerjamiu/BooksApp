@@ -61,8 +61,9 @@ class _UpdateEmailViewState extends State<UpdateEmailView> {
                     ),
                     const Spacing.bigHeight(),
                     Consumer(
-                      builder: (_, ScopedReader watch, __) {
-                        final controller = watch(updateEmailNotifierProvider);
+                      builder: (_, WidgetRef ref, __) {
+                        final controller =
+                            ref.watch(updateEmailNotifierProvider);
 
                         return AppTextField(
                           hintText: AppStrings.password,
@@ -84,16 +85,15 @@ class _UpdateEmailViewState extends State<UpdateEmailView> {
               ),
               const Spacing.largeHeight(),
               Consumer(
-                builder: (_, watch, __) => AppElevatedButton(
-                  isLoading: watch(updateEmailNotifierProvider).state.isLoading,
+                builder: (_, ref, __) => AppElevatedButton(
+                  isLoading:
+                      ref.watch(updateEmailNotifierProvider).state.isLoading,
                   label: AppStrings.updateEmail,
                   onPressed: () async {
                     FocusScope.of(context).unfocus();
 
                     if (_formKey.currentState!.validate()) {
-                      await context
-                          .read(updateEmailNotifierProvider)
-                          .updateEmail(
+                      await ref.read(updateEmailNotifierProvider).updateEmail(
                             emailAddressController.text.trim(),
                             passwordController.text,
                           );

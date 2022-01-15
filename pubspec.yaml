@@ -12,22 +12,46 @@ dependencies:
   flutter:
     sdk: flutter
 
-  google_fonts: ^2.1.0
+  # A package to include fonts from fonts.google.com in your Flutter app.
+  google_fonts: ^2.2.0
 
-  hooks_riverpod: ^0.14.0+5
-  flutter_hooks: ^0.18.0
+  # A simple way to access state from anywhere in your application while robust 
+  # and testable.
+  hooks_riverpod: ^1.0.3
 
-  firebase_core: ^1.7.0
-  firebase_auth: ^3.1.3
-  cloud_firestore: ^2.5.3
-  cloud_functions: ^3.0.4
-  google_sign_in: ^5.1.1
+  # A flutter implementation of React hooks. It adds a new kind of widget with
+  # enhanced code reuse
+  flutter_hooks: ^0.18.2
+
+  # Flutter plugin for Firebase Core, enabling connecting to multiple Firebase apps.
+  firebase_core: ^1.11.0
+
+  # Flutter plugin for Firebase Auth, enabling Android and iOS
+  # authentication using passwords, phone numbers and identity providers 
+  # like Google, Facebook and Twitter.
+  firebase_auth: ^3.3.5
+
+  # Flutter plugin for Cloud Firestore, a cloud-hosted, noSQL database
+  # with live synchronization and offline support on Android and iOS.
+  cloud_firestore: ^3.1.6
+
+  # A Flutter plugin allowing you to use Firebase Cloud Functions
+  cloud_functions: ^3.2.5
+
+  # Flutter plugin for Google Sign-In, a secure authentication system for 
+  # signing in with a Google account on Android and iOS
+  google_sign_in: ^5.2.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  # Provides APIs for debugging and error logging, similar to loggers 
+  # in other languages.
   logging: ^1.0.2
+
+  # A Dart mock library which simplifies mocking with null safety support 
+  # and no manual mocks or code generation
   mocktail: ^0.2.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -35,7 +59,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.0
+  flutter_lints: ^1.0.4
 
 flutter:
 
@@ -43,16 +67,3 @@ flutter:
 
   assets:
     - assets/images/
-
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700

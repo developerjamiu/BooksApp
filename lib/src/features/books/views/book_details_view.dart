@@ -30,15 +30,16 @@ class BookDetailsView extends StatelessWidget {
         iconTheme: IconThemeData(color: colorScheme.onBackground),
         actions: [
           Consumer(
-            builder: (context, watch, child) {
-              final notifier = watch(favoriteBooksNotifierProvider(book.id));
+            builder: (context, ref, child) {
+              final notifier =
+                  ref.watch(favoriteBooksNotifierProvider(book.id));
 
               return IconButton(
                 onPressed: () {
                   final FavoriteBook fBook =
                       ModelConverter.toFavoriteBook(book);
 
-                  context
+                  ref
                       .read(favoriteBooksNotifierProvider(book.id))
                       .addOrRemoveFromFavorite(fBook);
                 },

@@ -14,13 +14,15 @@ import '../../../widgets/statusbar.dart';
 import '../notifiers/login_notifier.dart';
 import 'forgot_password_view.dart';
 
-class LoginView extends HookWidget {
+class LoginView extends HookConsumerWidget {
   LoginView({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final loginNotifier = ref.watch(loginNotifierProvider);
+
     final emailAddressController = useTextEditingController();
     final passwordController = useTextEditingController();
 
@@ -54,25 +56,18 @@ class LoginView extends HookWidget {
                           validator: context.validateEmailAddress,
                         ),
                         const Spacing.bigHeight(),
-                        Consumer(
-                          builder: (context, watch, child) {
-                            final loginNotifier = watch(loginNotifierProvider);
-
-                            return AppTextField(
-                              hintText: AppStrings.password,
-                              controller: passwordController,
-                              keyboardType: TextInputType.visiblePassword,
-                              obscureText: !loginNotifier.passwordVisible,
-                              suffixIcon: IconButton(
-                                icon: loginNotifier.passwordVisible
-                                    ? const Icon(Icons.visibility_off)
-                                    : const Icon(Icons.visibility),
-                                onPressed:
-                                    loginNotifier.togglePasswordVisibility,
-                              ),
-                              validator: context.validatePassword,
-                            );
-                          },
+                        AppTextField(
+                          hintText: AppStrings.password,
+                          controller: passwordController,
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: !loginNotifier.passwordVisible,
+                          suffixIcon: IconButton(
+                            icon: loginNotifier.passwordVisible
+                                ? const Icon(Icons.visibility_off)
+                                : const Icon(Icons.visibility),
+                            onPressed: loginNotifier.togglePasswordVisibility,
+                          ),
+                          validator: context.validatePassword,
                         ),
                         const Spacing.smallHeight(),
                         Align(
@@ -95,30 +90,24 @@ class LoginView extends HookWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: Column(
                         children: [
-                          Consumer(
-                            builder: (_, watch, __) => AppElevatedButton(
-                              isLoading:
-                                  watch(loginNotifierProvider).state.isLoading,
-                              label: AppStrings.login,
-                              onPressed: () async {
-                                FocusScope.of(context).unfocus();
+                          AppElevatedButton(
+                            isLoading: loginNotifier.state.isLoading,
+                            label: AppStrings.login,
+                            onPressed: () async {
+                              FocusScope.of(context).unfocus();
 
-                                if (_formKey.currentState!.validate()) {
-                                  await context
-                                      .read(loginNotifierProvider)
-                                      .loginUser(
-                                        emailAddress:
-                                            emailAddressController.text,
-                                        password: passwordController.text,
-                                      );
-                                }
-                              },
-                            ),
+                              if (_formKey.currentState!.validate()) {
+                                await ref.read(loginNotifierProvider).loginUser(
+                                      emailAddress: emailAddressController.text,
+                                      password: passwordController.text,
+                                    );
+                              }
+                            },
                           ),
                           const Spacing.mediumHeight(),
                           ElevatedButton.icon(
                             icon: Image.asset(AppImages.googleLogo, width: 24),
-                            onPressed: () => context
+                            onPressed: () => ref
                                 .read(loginNotifierProvider)
                                 .loginUserWithGoogle(),
                             label: Text(
@@ -134,11 +123,9 @@ class LoginView extends HookWidget {
                           ),
                           const Spacing.smallHeight(),
                           TextButton(
-                            onPressed: () {
-                              context
-                                  .read(loginNotifierProvider)
-                                  .navigateToRegister();
-                            },
+                            onPressed: () => ref
+                                .read(loginNotifierProvider)
+                                .navigateToRegister(),
                             child: const Text(AppStrings.noAccount),
                           ),
                           const Spacing.smallHeight(),
