@@ -13,7 +13,7 @@ class HomeView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentPageIndex = ref.watch(homeCurrentPageIndex.notifier);
+    final currentPageIndex = ref.watch(homeCurrentPageIndex);
 
     return Statusbar(
       child: Scaffold(
@@ -21,10 +21,11 @@ class HomeView extends ConsumerWidget {
           const BooksView(),
           const FavoriteBooksView(),
           const ProfileView(),
-        ][currentPageIndex.state],
+        ][currentPageIndex],
         bottomNavigationBar: BottomNavigationBar(
-          currentIndex: currentPageIndex.state,
-          onTap: (newIndex) => currentPageIndex.state = newIndex,
+          currentIndex: currentPageIndex,
+          onTap: (newIndex) =>
+              ref.read(homeCurrentPageIndex.notifier).state = newIndex,
           showUnselectedLabels: true,
           type: BottomNavigationBarType.fixed,
           selectedLabelStyle: const TextStyle(fontSize: 12),

@@ -40,7 +40,7 @@ class HttpService implements INetworkService {
     } on HttpException {
       throw Failure('Please check your internet connection');
     } catch (ex) {
-      rethrow;
+      throw Failure(ex.toString());
     }
   }
 }

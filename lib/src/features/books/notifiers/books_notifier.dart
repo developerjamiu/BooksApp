@@ -1,3 +1,4 @@
+import 'package:books/src/core/constants/strings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/utilities/base_change_notifier.dart';
@@ -25,7 +26,7 @@ class BooksNotitier extends BaseChangeNotifier {
   String _searchQuery = '';
   String get searchQuery => _searchQuery;
 
-  Future<void> getBooks({String query = '""'}) async {
+  Future<void> getBooks({String query = AppStrings.defaultBooksQuery}) async {
     try {
       setState(state: AppState.loading);
 
@@ -40,10 +41,12 @@ class BooksNotitier extends BaseChangeNotifier {
       if (_books.length < _pageSize) _moreDataAvailable = false;
 
       _currentPage++;
+
+      setState(state: AppState.idle);
     } on Failure {
       setState(state: AppState.error);
-    } finally {
-      setState(state: AppState.idle);
+    } catch (ex) {
+      setState(state: AppState.error);
     }
   }
 
@@ -61,10 +64,12 @@ class BooksNotitier extends BaseChangeNotifier {
       }
 
       _books.addAll(books);
+
+      setState(state: AppState.idle);
     } on Failure {
       setState(state: AppState.error);
-    } finally {
-      setState(state: AppState.idle);
+    } catch (ex) {
+      setState(state: AppState.error);
     }
   }
 }
