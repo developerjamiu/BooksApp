@@ -58,14 +58,14 @@ class BooksView extends HookWidget {
                               return Row(
                                 children: [
                                   Text(
-                                    query == '""'
+                                    query == AppStrings.defaultBooksQuery
                                         ? AppStrings.booksSubHeading
                                         : 'Result for $query',
                                     style:
                                         Theme.of(context).textTheme.headline6,
                                   ),
                                   const Spacing.smallWidth(),
-                                  query == '""'
+                                  query == AppStrings.defaultBooksQuery
                                       ? const Spacing.empty()
                                       : GestureDetector(
                                           onTap: () {
@@ -323,19 +323,22 @@ class BooksErrorView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          AppStrings.errorBooks,
-          style: Theme.of(context).textTheme.bodyText1,
-        ),
-        const Spacing.bigHeight(),
-        ElevatedButton(
-          onPressed: () => ref.refresh(booksNotifierProvider).getBooks(),
-          child: const Text(AppStrings.retry),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            AppStrings.errorBooks,
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+          const Spacing.bigHeight(),
+          ElevatedButton(
+            onPressed: () => ref.refresh(booksNotifierProvider).getBooks(),
+            child: const Text(AppStrings.retry),
+          ),
+        ],
+      ),
     );
   }
 }

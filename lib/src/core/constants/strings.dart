@@ -4,6 +4,8 @@ class AppStrings {
   // App wide
   static const appName = 'Books App';
 
+  static const defaultBooksQuery = 'a';
+
   // Authentication
   static const login = 'Login';
   static const register = 'Register';
