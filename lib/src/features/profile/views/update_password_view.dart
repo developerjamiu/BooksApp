@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/constants/strings.dart';
-import '../../../core/utilities/base_change_notifier.dart';
+import '../../../core/utilities/view_state.dart';
 import '../../../core/utilities/validation_extensions.dart';
 import '../../../widgets/app_elevated_button.dart';
 import '../../../widgets/app_text_field.dart';
@@ -55,19 +55,21 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                   children: [
                     Consumer(
                       builder: (_, WidgetRef ref, __) {
-                        final controller =
+                        final updatePasswordState =
                             ref.watch(updatePasswordNotifierProvider);
 
                         return AppTextField(
                           hintText: AppStrings.oldPassword,
                           keyboardType: TextInputType.visiblePassword,
                           controller: oldPasswordController,
-                          obscureText: !controller.oldPasswordVisible,
+                          obscureText: !updatePasswordState.oldPasswordVisible,
                           suffixIcon: IconButton(
-                            icon: controller.oldPasswordVisible
+                            icon: updatePasswordState.oldPasswordVisible
                                 ? const Icon(Icons.visibility_off)
                                 : const Icon(Icons.visibility),
-                            onPressed: controller.toggleOldPasswordVisibility,
+                            onPressed: ref
+                                .read(updatePasswordNotifierProvider.notifier)
+                                .toggleOldPasswordVisibility,
                           ),
                           validator: context.validatePassword,
                         );
@@ -76,19 +78,21 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
                     const Spacing.bigHeight(),
                     Consumer(
                       builder: (_, WidgetRef ref, __) {
-                        final controller =
+                        final newPasswordState =
                             ref.watch(updatePasswordNotifierProvider);
 
                         return AppTextField(
                           hintText: AppStrings.newPassword,
                           controller: newPasswordController,
                           keyboardType: TextInputType.visiblePassword,
-                          obscureText: !controller.newPasswordVisible,
+                          obscureText: !newPasswordState.newPasswordVisible,
                           suffixIcon: IconButton(
-                            icon: controller.newPasswordVisible
+                            icon: newPasswordState.newPasswordVisible
                                 ? const Icon(Icons.visibility_off)
                                 : const Icon(Icons.visibility),
-                            onPressed: controller.toggleNewPasswordVisibility,
+                            onPressed: ref
+                                .read(updatePasswordNotifierProvider.notifier)
+                                .toggleNewPasswordVisibility,
                           ),
                           validator: context.validatePassword,
                         );
@@ -100,15 +104,17 @@ class _UpdatePasswordViewState extends State<UpdatePasswordView> {
               const Spacing.largeHeight(),
               Consumer(
                 builder: (_, ref, __) => AppElevatedButton(
-                  isLoading:
-                      ref.watch(updatePasswordNotifierProvider).state.isLoading,
+                  isLoading: ref
+                      .watch(updatePasswordNotifierProvider)
+                      .viewState
+                      .isLoading,
                   label: AppStrings.updatePassword,
                   onPressed: () async {
                     FocusScope.of(context).unfocus();
 
                     if (_formKey.currentState!.validate()) {
                       await ref
-                          .read(updatePasswordNotifierProvider)
+                          .read(updatePasswordNotifierProvider.notifier)
                           .updatePassword(
                             oldPasswordController.text,
                             newPasswordController.text,

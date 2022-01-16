@@ -31,7 +31,7 @@ class BookDetailsView extends StatelessWidget {
         actions: [
           Consumer(
             builder: (context, ref, child) {
-              final notifier =
+              final favoriteBooksState =
                   ref.watch(favoriteBooksNotifierProvider(book.id));
 
               return IconButton(
@@ -40,10 +40,10 @@ class BookDetailsView extends StatelessWidget {
                       ModelConverter.toFavoriteBook(book);
 
                   ref
-                      .read(favoriteBooksNotifierProvider(book.id))
+                      .read(favoriteBooksNotifierProvider(book.id).notifier)
                       .addOrRemoveFromFavorite(fBook);
                 },
-                icon: notifier.isFavorite
+                icon: favoriteBooksState.isFavorite
                     ? const Icon(Icons.favorite)
                     : const Icon(Icons.favorite_outline),
               );
@@ -156,11 +156,12 @@ class BookDetailsView extends StatelessWidget {
                         children: book.volumeInfo.authors == null
                             ? []
                             : book.volumeInfo.authors!
-                                .map((e) => Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 8.0),
-                                      child: Pill(text: e, width: null),
-                                    ))
+                                .map(
+                                  (e) => Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Pill(text: e, width: null),
+                                  ),
+                                )
                                 .toList(),
                       ),
                     ],

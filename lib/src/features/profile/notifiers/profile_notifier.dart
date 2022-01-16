@@ -2,14 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/routes.dart';
-import '../../../core/utilities/base_change_notifier.dart';
+import '../../../core/utilities/view_state.dart';
 import '../../../repositories/authentication_repository.dart';
 import '../../../services/base/failure.dart';
 import '../../../services/navigation_service.dart';
 import '../../../services/snackbar_service.dart';
+import '../states/profile_state.dart';
 
-class ProfileNotifier extends BaseChangeNotifier {
-  ProfileNotifier(this._read);
+class ProfileNotifier extends StateNotifier<ProfileState> {
+  ProfileNotifier(this._read) : super(ProfileState.initial());
 
   final Reader _read;
 
@@ -26,7 +27,7 @@ class ProfileNotifier extends BaseChangeNotifier {
 
   Future<void> deleteUser() async {
     try {
-      setState(state: AppState.loading);
+      state = state.copyWith(viewState: ViewState.loading);
 
       final message = await _read(authenticationRepository).deleteUser();
 
@@ -39,11 +40,12 @@ class ProfileNotifier extends BaseChangeNotifier {
     } on Failure catch (f) {
       _read(snackbarService).showErrorSnackBar(f.message);
     } finally {
-      setState(state: AppState.idle);
+      state = state.copyWith(viewState: ViewState.idle);
     }
   }
 }
 
-final profileNotifierProvider = ChangeNotifierProvider.autoDispose(
+final profileNotifierProvider =
+    StateNotifierProvider.autoDispose<ProfileNotifier, ProfileState>(
   (ref) => ProfileNotifier(ref.read),
 );

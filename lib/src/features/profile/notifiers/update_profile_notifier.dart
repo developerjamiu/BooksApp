@@ -1,27 +1,22 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../core/utilities/base_change_notifier.dart';
+import '../../../core/utilities/view_state.dart';
 import '../../../repositories/authentication_repository.dart';
 import '../../../services/base/failure.dart';
 import '../../../services/navigation_service.dart';
 import '../../../services/snackbar_service.dart';
+import '../states/update_profile_state.dart';
 
-class UpdateProfileNotifier extends BaseChangeNotifier {
-  UpdateProfileNotifier(this._read);
+class UpdateProfileNotifier extends StateNotifier<UpdateProfileState> {
+  UpdateProfileNotifier(this._read) : super(UpdateProfileState.initial());
 
   final Reader _read;
 
-  bool _passwordVisible = false;
-
-  bool get passwordVisible => _passwordVisible;
-
-  void togglePasswordVisibility() {
-    _passwordVisible = !_passwordVisible;
-    setState();
-  }
+  void togglePasswordVisibility() =>
+      state = state.copyWith(passwordVisible: !state.passwordVisible);
 
   Future<void> updateProfile(String fullName) async {
-    setState(state: AppState.loading);
+    state = state.copyWith(viewState: ViewState.loading);
 
     try {
       await _read(authenticationRepository).updateUser(fullName: fullName);
@@ -34,11 +29,12 @@ class UpdateProfileNotifier extends BaseChangeNotifier {
 
       _read(snackbarService).showErrorSnackBar(ex.message);
     } finally {
-      setState(state: AppState.idle);
+      state = state.copyWith(viewState: ViewState.idle);
     }
   }
 }
 
-final updateProfileNotifierProvider = ChangeNotifierProvider.autoDispose(
+final updateProfileNotifierProvider = StateNotifierProvider.autoDispose<
+    UpdateProfileNotifier, UpdateProfileState>(
   (ref) => UpdateProfileNotifier(ref.read),
 );

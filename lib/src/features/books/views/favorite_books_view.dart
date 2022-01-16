@@ -193,7 +193,8 @@ class BookListItem extends ConsumerWidget {
                     IconButton(
                       onPressed: () {
                         ref
-                            .read(favoriteBooksNotifierProvider(book.id))
+                            .read(
+                                favoriteBooksNotifierProvider(book.id).notifier)
                             .addOrRemoveFromFavorite(book);
                       },
                       icon: const Icon(Icons.delete),

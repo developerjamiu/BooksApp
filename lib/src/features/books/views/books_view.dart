@@ -6,7 +6,7 @@ import '../../../core/constants/colors.dart';
 import '../../../core/constants/dimensions.dart';
 import '../../../core/constants/strings.dart';
 import '../../../core/routes.dart';
-import '../../../core/utilities/base_change_notifier.dart';
+import '../../../core/utilities/view_state.dart';
 import '../../../services/navigation_service.dart';
 import '../../../widgets/pill.dart';
 import '../../../widgets/responsive.dart';
@@ -71,7 +71,8 @@ class BooksView extends HookWidget {
                                           onTap: () {
                                             searchController.clear();
                                             ref
-                                                .read(booksNotifierProvider)
+                                                .read(booksNotifierProvider
+                                                    .notifier)
                                                 .getBooks();
                                           },
                                           child: const Icon(Icons.cancel),
@@ -90,14 +91,14 @@ class BooksView extends HookWidget {
                           final booksNotifier =
                               ref.watch(booksNotifierProvider);
 
-                          if (booksNotifier.state.isLoading) {
+                          if (booksNotifier.viewState.isLoading) {
                             return const Center(
                                 child: CircularProgressIndicator());
-                          } else if (booksNotifier.state.isError) {
+                          } else if (booksNotifier.viewState.isError) {
                             return const BooksErrorView();
                           } else {
                             return BookList(
-                              books: booksNotifier.books,
+                              books: booksNotifier.books!,
                               moreDataAvailable:
                                   booksNotifier.moreDataAvailable,
                             );
@@ -131,7 +132,7 @@ class SearchTextField extends ConsumerWidget {
         controller: controller,
         textInputAction: TextInputAction.search,
         onSubmitted: (text) =>
-            ref.read(booksNotifierProvider).getBooks(query: text),
+            ref.read(booksNotifierProvider.notifier).getBooks(query: text),
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.only(
             top: 24,
@@ -185,7 +186,7 @@ class BookList extends HookConsumerWidget {
       void scrollListener() {
         if (booksScrollController.position.pixels ==
             booksScrollController.position.maxScrollExtent) {
-          ref.read(booksNotifierProvider).getMoreBooks();
+          ref.read(booksNotifierProvider.notifier).getMoreBooks();
         }
       }
 
@@ -196,7 +197,7 @@ class BookList extends HookConsumerWidget {
 
     if (books.isNotEmpty) {
       return RefreshIndicator(
-        onRefresh: () => ref.read(booksNotifierProvider).getBooks(),
+        onRefresh: () => ref.read(booksNotifierProvider.notifier).getBooks(),
         child: GridView.builder(
           controller: booksScrollController,
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -334,7 +335,8 @@ class BooksErrorView extends ConsumerWidget {
           ),
           const Spacing.bigHeight(),
           ElevatedButton(
-            onPressed: () => ref.refresh(booksNotifierProvider).getBooks(),
+            onPressed: () =>
+                ref.refresh(booksNotifierProvider.notifier).getBooks(),
             child: const Text(AppStrings.retry),
           ),
         ],

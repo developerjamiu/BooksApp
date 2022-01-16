@@ -54,11 +54,9 @@ class VerifyEmailView extends ConsumerWidget {
                         const SizedBox(height: 24),
                         AppElevatedButton(
                           label: AppStrings.goToLogin,
-                          onPressed: () async {
-                            await ref
-                                .read(verifyEmailNotifierProvider)
-                                .navigateToLogin();
-                          },
+                          onPressed: () async => await ref
+                              .read(verifyEmailNotifierProvider.notifier)
+                              .navigateToLogin(),
                         )
                       ],
                     ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/constants/strings.dart';
-import '../../../core/utilities/base_change_notifier.dart';
+import '../../../core/utilities/view_state.dart';
 import '../../../core/utilities/validation_extensions.dart';
 import '../../../widgets/app_elevated_button.dart';
 import '../../../widgets/app_text_field.dart';
@@ -11,14 +11,14 @@ import '../notifiers/forgot_password_notifier.dart';
 
 /// Hook widget is currently causing unexpected behaviour with bottom sheets
 /// So here, a stateful widget is used instead
-class ForgotPasswordView extends StatefulWidget {
+class ForgotPasswordView extends ConsumerStatefulWidget {
   const ForgotPasswordView({Key? key}) : super(key: key);
 
   @override
-  State<ForgotPasswordView> createState() => _ForgotPasswordViewState();
+  ConsumerState<ForgotPasswordView> createState() => _ForgotPasswordViewState();
 }
 
-class _ForgotPasswordViewState extends State<ForgotPasswordView> {
+class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
   final _formKey = GlobalKey<FormState>();
 
   late final emailAddressController = TextEditingController();
@@ -31,6 +31,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
 
   @override
   Widget build(BuildContext context) {
+    final forgotPasswordState = ref.watch(forgotPasswordNotifierProvider);
+
     return Wrap(
       children: [
         Padding(
@@ -68,15 +70,14 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
               const Spacing.largeHeight(),
               Consumer(
                 builder: (_, ref, __) => AppElevatedButton(
-                  isLoading:
-                      ref.watch(forgotPasswordNotifierProvider).state.isLoading,
+                  isLoading: forgotPasswordState.viewState.isLoading,
                   label: AppStrings.resetPassword,
                   onPressed: () async {
                     FocusScope.of(context).unfocus();
 
                     if (_formKey.currentState!.validate()) {
                       await ref
-                          .read(forgotPasswordNotifierProvider)
+                          .read(forgotPasswordNotifierProvider.notifier)
                           .resetPassword(emailAddressController.text.trim());
                     }
                   },

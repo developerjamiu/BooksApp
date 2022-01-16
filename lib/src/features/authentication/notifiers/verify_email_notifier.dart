@@ -1,12 +1,11 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/routes.dart';
-import '../../../core/utilities/base_change_notifier.dart';
 import '../../../repositories/authentication_repository.dart';
 import '../../../services/navigation_service.dart';
 
-class VerifyEmailNotifier extends BaseChangeNotifier {
-  VerifyEmailNotifier(this._read);
+class VerifyEmailNotifier extends StateNotifier<void> {
+  VerifyEmailNotifier(this._read) : super(null);
 
   final Reader _read;
 
@@ -17,6 +16,7 @@ class VerifyEmailNotifier extends BaseChangeNotifier {
   }
 }
 
-final verifyEmailNotifierProvider = ChangeNotifierProvider.autoDispose(
+final verifyEmailNotifierProvider =
+    StateNotifierProvider.autoDispose<VerifyEmailNotifier, void>(
   (ref) => VerifyEmailNotifier(ref.read),
 );
