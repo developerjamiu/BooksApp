@@ -10,7 +10,7 @@ class StartupView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (ref.watch(startupNotifierProvider).currentUser == null) {
+    if (ref.watch(startupNotifierProvider.notifier).currentUser == null) {
       return LoginView();
     } else {
       return const HomeView();

@@ -4,8 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/constants/images.dart';
 import '../../../core/constants/strings.dart';
-import '../../../core/utilities/base_change_notifier.dart';
 import '../../../core/utilities/validation_extensions.dart';
+import '../../../core/utilities/view_state.dart';
 import '../../../widgets/app_elevated_button.dart';
 import '../../../widgets/app_text_field.dart';
 import '../../../widgets/responsive_dialog.dart';
@@ -21,7 +21,7 @@ class LoginView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final loginNotifier = ref.watch(loginNotifierProvider);
+    final loginState = ref.watch(loginNotifierProvider);
 
     final emailAddressController = useTextEditingController();
     final passwordController = useTextEditingController();
@@ -60,12 +60,14 @@ class LoginView extends HookConsumerWidget {
                           hintText: AppStrings.password,
                           controller: passwordController,
                           keyboardType: TextInputType.visiblePassword,
-                          obscureText: !loginNotifier.passwordVisible,
+                          obscureText: !loginState.passwordVisible,
                           suffixIcon: IconButton(
-                            icon: loginNotifier.passwordVisible
+                            icon: loginState.passwordVisible
                                 ? const Icon(Icons.visibility_off)
                                 : const Icon(Icons.visibility),
-                            onPressed: loginNotifier.togglePasswordVisibility,
+                            onPressed: ref
+                                .read(loginNotifierProvider.notifier)
+                                .togglePasswordVisibility,
                           ),
                           validator: context.validatePassword,
                         ),
@@ -91,13 +93,15 @@ class LoginView extends HookConsumerWidget {
                       child: Column(
                         children: [
                           AppElevatedButton(
-                            isLoading: loginNotifier.state.isLoading,
+                            isLoading: loginState.viewState.isLoading,
                             label: AppStrings.login,
                             onPressed: () async {
                               FocusScope.of(context).unfocus();
 
                               if (_formKey.currentState!.validate()) {
-                                await ref.read(loginNotifierProvider).loginUser(
+                                await ref
+                                    .read(loginNotifierProvider.notifier)
+                                    .loginUser(
                                       emailAddress: emailAddressController.text,
                                       password: passwordController.text,
                                     );
@@ -107,9 +111,9 @@ class LoginView extends HookConsumerWidget {
                           const Spacing.mediumHeight(),
                           ElevatedButton.icon(
                             icon: Image.asset(AppImages.googleLogo, width: 24),
-                            onPressed: () => ref
-                                .read(loginNotifierProvider)
-                                .loginUserWithGoogle(),
+                            onPressed: ref
+                                .read(loginNotifierProvider.notifier)
+                                .loginUserWithGoogle,
                             label: Text(
                               AppStrings.signinWithGoogle,
                               style: TextStyle(
@@ -123,9 +127,9 @@ class LoginView extends HookConsumerWidget {
                           ),
                           const Spacing.smallHeight(),
                           TextButton(
-                            onPressed: () => ref
-                                .read(loginNotifierProvider)
-                                .navigateToRegister(),
+                            onPressed: ref
+                                .read(loginNotifierProvider.notifier)
+                                .navigateToRegister,
                             child: const Text(AppStrings.noAccount),
                           ),
                           const Spacing.smallHeight(),

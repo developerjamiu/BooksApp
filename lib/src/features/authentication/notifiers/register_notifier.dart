@@ -1,29 +1,24 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/routes.dart';
-import '../../../core/utilities/base_change_notifier.dart';
+import '../../../core/utilities/view_state.dart';
 import '../../../repositories/authentication_repository.dart';
 import '../../../services/base/failure.dart';
 import '../../../services/navigation_service.dart';
 import '../../../services/snackbar_service.dart';
 import '../models/user_params.dart';
+import '../states/register_state.dart';
 
-class RegisterNotifier extends BaseChangeNotifier {
-  RegisterNotifier(this._read);
+class RegisterNotifier extends StateNotifier<RegisterState> {
+  RegisterNotifier(this._read) : super(RegisterState.initial());
 
   final Reader _read;
 
-  bool _passwordVisible = false;
-
-  bool get passwordVisible => _passwordVisible;
-
-  void togglePasswordVisibility() {
-    _passwordVisible = !_passwordVisible;
-    notifyListeners();
-  }
+  void togglePasswordVisibility() =>
+      state = state.copyWith(passwordVisible: !state.passwordVisible);
 
   Future<void> registerUser({required UserParams userParams}) async {
-    setState(state: AppState.loading);
+    state = state.copyWith(viewState: ViewState.loading);
 
     try {
       await _read(authenticationRepository).register(params: userParams);
@@ -35,7 +30,7 @@ class RegisterNotifier extends BaseChangeNotifier {
     } on Failure catch (ex) {
       _read(snackbarService).showErrorSnackBar(ex.message);
     } finally {
-      setState(state: AppState.idle);
+      state = state.copyWith(viewState: ViewState.idle);
     }
   }
 
@@ -44,6 +39,7 @@ class RegisterNotifier extends BaseChangeNotifier {
   void navigateToLogin() => _read(navigationService).navigateBack();
 }
 
-final registerNotifierProvider = ChangeNotifierProvider.autoDispose(
+final registerNotifierProvider =
+    StateNotifierProvider.autoDispose<RegisterNotifier, RegisterState>(
   (ref) => RegisterNotifier(ref.read),
 );

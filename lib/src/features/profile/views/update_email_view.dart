@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/constants/strings.dart';
-import '../../../core/utilities/base_change_notifier.dart';
+import '../../../core/utilities/view_state.dart';
 import '../../../core/utilities/validation_extensions.dart';
 import '../../../widgets/app_elevated_button.dart';
 import '../../../widgets/app_text_field.dart';
@@ -62,19 +62,21 @@ class _UpdateEmailViewState extends State<UpdateEmailView> {
                     const Spacing.bigHeight(),
                     Consumer(
                       builder: (_, WidgetRef ref, __) {
-                        final controller =
+                        final updateEmailState =
                             ref.watch(updateEmailNotifierProvider);
 
                         return AppTextField(
                           hintText: AppStrings.password,
                           controller: passwordController,
                           keyboardType: TextInputType.visiblePassword,
-                          obscureText: !controller.passwordVisible,
+                          obscureText: !updateEmailState.passwordVisible,
                           suffixIcon: IconButton(
-                            icon: controller.passwordVisible
+                            icon: updateEmailState.passwordVisible
                                 ? const Icon(Icons.visibility_off)
                                 : const Icon(Icons.visibility),
-                            onPressed: controller.togglePasswordVisibility,
+                            onPressed: ref
+                                .read(updateEmailNotifierProvider.notifier)
+                                .togglePasswordVisibility,
                           ),
                           validator: context.validatePassword,
                         );
@@ -86,14 +88,18 @@ class _UpdateEmailViewState extends State<UpdateEmailView> {
               const Spacing.largeHeight(),
               Consumer(
                 builder: (_, ref, __) => AppElevatedButton(
-                  isLoading:
-                      ref.watch(updateEmailNotifierProvider).state.isLoading,
+                  isLoading: ref
+                      .watch(updateEmailNotifierProvider)
+                      .viewState
+                      .isLoading,
                   label: AppStrings.updateEmail,
                   onPressed: () async {
                     FocusScope.of(context).unfocus();
 
                     if (_formKey.currentState!.validate()) {
-                      await ref.read(updateEmailNotifierProvider).updateEmail(
+                      await ref
+                          .read(updateEmailNotifierProvider.notifier)
+                          .updateEmail(
                             emailAddressController.text.trim(),
                             passwordController.text,
                           );

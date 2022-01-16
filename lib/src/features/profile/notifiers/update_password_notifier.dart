@@ -1,36 +1,25 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../core/utilities/base_change_notifier.dart';
+import '../../../core/utilities/view_state.dart';
 import '../../../repositories/authentication_repository.dart';
 import '../../../services/base/failure.dart';
 import '../../../services/navigation_service.dart';
 import '../../../services/snackbar_service.dart';
+import '../states/update_password_state.dart';
 
-class UpdatePasswordNotifier extends BaseChangeNotifier {
-  UpdatePasswordNotifier(this._read);
+class UpdatePasswordNotifier extends StateNotifier<UpdatePasswordState> {
+  UpdatePasswordNotifier(this._read) : super(UpdatePasswordState.initial());
 
   final Reader _read;
 
-  bool _oldPasswordVisible = false;
+  void toggleOldPasswordVisibility() =>
+      state = state.copyWith(oldPasswordVisible: !state.oldPasswordVisible);
 
-  bool get oldPasswordVisible => _oldPasswordVisible;
-
-  void toggleOldPasswordVisibility() {
-    _oldPasswordVisible = !_oldPasswordVisible;
-    setState();
-  }
-
-  bool _newPasswordVisible = false;
-
-  bool get newPasswordVisible => _newPasswordVisible;
-
-  void toggleNewPasswordVisibility() {
-    _newPasswordVisible = !_newPasswordVisible;
-    setState();
-  }
+  void toggleNewPasswordVisibility() =>
+      state = state.copyWith(newPasswordVisible: !state.newPasswordVisible);
 
   Future<void> updatePassword(String oldPassword, String newPassword) async {
-    setState(state: AppState.loading);
+    state = state.copyWith(viewState: ViewState.loading);
 
     try {
       await _read(authenticationRepository).updatePassword(
@@ -46,11 +35,12 @@ class UpdatePasswordNotifier extends BaseChangeNotifier {
 
       _read(snackbarService).showErrorSnackBar(ex.message);
     } finally {
-      setState(state: AppState.idle);
+      state = state.copyWith(viewState: ViewState.idle);
     }
   }
 }
 
-final updatePasswordNotifierProvider = ChangeNotifierProvider.autoDispose(
+final updatePasswordNotifierProvider = StateNotifierProvider.autoDispose<
+    UpdatePasswordNotifier, UpdatePasswordState>(
   (ref) => UpdatePasswordNotifier(ref.read),
 );

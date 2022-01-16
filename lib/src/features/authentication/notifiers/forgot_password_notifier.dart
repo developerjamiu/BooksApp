@@ -1,18 +1,19 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../core/utilities/base_change_notifier.dart';
+import '../../../core/utilities/view_state.dart';
 import '../../../repositories/authentication_repository.dart';
 import '../../../services/base/failure.dart';
 import '../../../services/navigation_service.dart';
 import '../../../services/snackbar_service.dart';
+import '../states/forgot_password_state.dart';
 
-class ForgotPasswordNotifier extends BaseChangeNotifier {
-  ForgotPasswordNotifier(this._read);
+class ForgotPasswordNotifier extends StateNotifier<ForgotPasswordState> {
+  ForgotPasswordNotifier(this._read) : super(ForgotPasswordState.initial());
 
   final Reader _read;
 
   Future<void> resetPassword(String emailAddress) async {
-    setState(state: AppState.loading);
+    state = state.copyWith(viewState: ViewState.loading);
 
     try {
       await _read(authenticationRepository).resetPassword(emailAddress.trim());
@@ -27,11 +28,12 @@ class ForgotPasswordNotifier extends BaseChangeNotifier {
 
       _read(snackbarService).showErrorSnackBar(ex.message);
     } finally {
-      setState(state: AppState.idle);
+      state = state.copyWith(viewState: ViewState.idle);
     }
   }
 }
 
-final forgotPasswordNotifierProvider = ChangeNotifierProvider.autoDispose(
+final forgotPasswordNotifierProvider = StateNotifierProvider.autoDispose<
+    ForgotPasswordNotifier, ForgotPasswordState>(
   (ref) => ForgotPasswordNotifier(ref.read),
 );

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/constants/strings.dart';
-import '../../../core/utilities/base_change_notifier.dart';
+import '../../../core/utilities/view_state.dart';
 import '../../../core/utilities/validation_extensions.dart';
 import '../../../widgets/app_elevated_button.dart';
 import '../../../widgets/app_text_field.dart';
@@ -67,15 +67,17 @@ class _UpdateProfileViewState extends State<UpdateProfileView> {
               const Spacing.largeHeight(),
               Consumer(
                 builder: (_, ref, __) => AppElevatedButton(
-                  isLoading:
-                      ref.watch(updateProfileNotifierProvider).state.isLoading,
+                  isLoading: ref
+                      .watch(updateProfileNotifierProvider)
+                      .viewState
+                      .isLoading,
                   label: AppStrings.updateProfile,
                   onPressed: () async {
                     FocusScope.of(context).unfocus();
 
                     if (_formKey.currentState!.validate()) {
                       await ref
-                          .read(updateProfileNotifierProvider)
+                          .read(updateProfileNotifierProvider.notifier)
                           .updateProfile(fullNameController.text);
                     }
                   },

@@ -3,8 +3,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/constants/strings.dart';
-import '../../../core/utilities/base_change_notifier.dart';
 import '../../../core/utilities/validation_extensions.dart';
+import '../../../core/utilities/view_state.dart';
 import '../../../widgets/app_elevated_button.dart';
 import '../../../widgets/app_text_field.dart';
 import '../../../widgets/spacing.dart';
@@ -19,7 +19,7 @@ class RegisterView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final registerNotifier = ref.watch(registerNotifierProvider);
+    final registerState = ref.watch(registerNotifierProvider);
 
     final fullNameController = useTextEditingController();
     final emailAddressController = useTextEditingController();
@@ -65,13 +65,14 @@ class RegisterView extends HookConsumerWidget {
                           hintText: AppStrings.password,
                           controller: passwordController,
                           keyboardType: TextInputType.visiblePassword,
-                          obscureText: !registerNotifier.passwordVisible,
+                          obscureText: !registerState.passwordVisible,
                           suffixIcon: IconButton(
-                            icon: registerNotifier.passwordVisible
+                            icon: registerState.passwordVisible
                                 ? const Icon(Icons.visibility_off)
                                 : const Icon(Icons.visibility),
-                            onPressed:
-                                registerNotifier.togglePasswordVisibility,
+                            onPressed: ref
+                                .read(registerNotifierProvider.notifier)
+                                .togglePasswordVisibility,
                           ),
                           validator: context.validatePassword,
                         ),
@@ -83,14 +84,14 @@ class RegisterView extends HookConsumerWidget {
                       child: Column(
                         children: [
                           AppElevatedButton(
-                            isLoading: registerNotifier.state.isLoading,
+                            isLoading: registerState.viewState.isLoading,
                             label: AppStrings.createAccount,
                             onPressed: () async {
                               FocusScope.of(context).unfocus();
 
                               if (_formKey.currentState!.validate()) {
                                 await ref
-                                    .read(registerNotifierProvider)
+                                    .read(registerNotifierProvider.notifier)
                                     .registerUser(
                                       userParams: UserParams(
                                         fullName: fullNameController.text,
@@ -105,7 +106,7 @@ class RegisterView extends HookConsumerWidget {
                           const Spacing.smallHeight(),
                           TextButton(
                             onPressed: () => ref
-                                .read(registerNotifierProvider)
+                                .read(registerNotifierProvider.notifier)
                                 .navigateToLogin(),
                             child: const Text(AppStrings.haveAccount),
                           ),

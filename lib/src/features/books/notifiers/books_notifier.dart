@@ -1,79 +1,69 @@
-import 'package:books/src/core/constants/strings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../core/utilities/base_change_notifier.dart';
-import '../models/book.dart';
+import '../../../core/constants/strings.dart';
+import '../../../core/utilities/view_state.dart';
 import '../../../repositories/books_repository.dart';
 import '../../../services/base/failure.dart';
 import '../../../services/snackbar_service.dart';
+import '../states/books_state.dart';
 
-class BooksNotitier extends BaseChangeNotifier {
-  BooksNotitier(this._read) {
+class BooksNotitier extends StateNotifier<BooksState> {
+  BooksNotitier(this._read) : super(BooksState.initial()) {
     getBooks();
   }
 
   final Reader _read;
 
-  late List<Book> _books;
-  List<Book> get books => _books;
-
-  int _currentPage = 1;
-  final int _pageSize = 20;
-
-  bool _moreDataAvailable = true;
-  bool get moreDataAvailable => _moreDataAvailable;
-
-  String _searchQuery = '';
-  String get searchQuery => _searchQuery;
-
   Future<void> getBooks({String query = AppStrings.defaultBooksQuery}) async {
     try {
-      setState(state: AppState.loading);
+      state = state.copyWith(
+        viewState: ViewState.loading,
+        searchQuery: query,
+        currentPage: 1,
+      );
 
-      _searchQuery = query;
-      _currentPage = 1;
-
-      _books = await _read(booksRepository).getBooks(
-        currentPage: _currentPage,
+      final books = await _read(booksRepository).getBooks(
+        currentPage: state.currentPage,
         queryString: query,
       );
 
-      if (_books.length < _pageSize) _moreDataAvailable = false;
+      state = state.copyWith(
+        books: books,
+        currentPage: state.currentPage + 1,
+        viewState: ViewState.idle,
+      );
 
-      _currentPage++;
-
-      setState(state: AppState.idle);
+      if (state.books!.length < state.pageSize) {
+        state = state.copyWith(moreDataAvailable: false);
+      }
     } on Failure {
-      setState(state: AppState.error);
-    } catch (ex) {
-      setState(state: AppState.error);
+      state = state.copyWith(viewState: ViewState.error);
     }
   }
 
   Future<void> getMoreBooks() async {
     try {
       final books = await _read(booksRepository).getBooks(
-        queryString: searchQuery,
-        currentPage: _currentPage,
+        queryString: state.searchQuery,
+        currentPage: state.currentPage,
       );
 
       if (books.isEmpty) {
-        _moreDataAvailable = false;
+        state = state.copyWith(moreDataAvailable: false);
         _read(snackbarService)
             .showErrorSnackBar('You have reached the end of the book list');
       }
 
-      _books.addAll(books);
-
-      setState(state: AppState.idle);
+      state = state.copyWith(
+        books: [...state.books!, ...books],
+        viewState: ViewState.idle,
+      );
     } on Failure {
-      setState(state: AppState.error);
-    } catch (ex) {
-      setState(state: AppState.error);
+      state = state.copyWith(viewState: ViewState.error);
     }
   }
 }
 
-final booksNotifierProvider = ChangeNotifierProvider(
+final booksNotifierProvider = StateNotifierProvider<BooksNotitier, BooksState>(
   (ref) => BooksNotitier(ref.read),
 );

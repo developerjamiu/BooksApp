@@ -15,7 +15,7 @@ class ProfileView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(profileNotifierProvider).user;
+    final user = ref.watch(profileNotifierProvider.notifier).user;
 
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
@@ -106,8 +106,9 @@ class ProfileView extends ConsumerWidget {
                               borderRadius: BorderRadius.circular(16),
                             ),
                           ),
-                          onPressed:
-                              ref.read(profileNotifierProvider).logoutUser,
+                          onPressed: ref
+                              .read(profileNotifierProvider.notifier)
+                              .logoutUser,
                         ),
                         const Spacing.mediumWidth(),
                         ElevatedButton(
@@ -119,8 +120,9 @@ class ProfileView extends ConsumerWidget {
                               borderRadius: BorderRadius.circular(16),
                             ),
                           ),
-                          onPressed:
-                              ref.read(profileNotifierProvider).deleteUser,
+                          onPressed: ref
+                              .read(profileNotifierProvider.notifier)
+                              .deleteUser,
                         ),
                       ],
                     ),

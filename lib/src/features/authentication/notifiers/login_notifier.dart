@@ -1,31 +1,26 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/routes.dart';
-import '../../../core/utilities/base_change_notifier.dart';
+import '../../../core/utilities/view_state.dart';
 import '../../../repositories/authentication_repository.dart';
 import '../../../services/base/failure.dart';
 import '../../../services/navigation_service.dart';
 import '../../../services/snackbar_service.dart';
+import '../states/login_state.dart';
 
-class LoginNotifier extends BaseChangeNotifier {
-  LoginNotifier(this._read);
+class LoginNotifier extends StateNotifier<LoginState> {
+  LoginNotifier(this._read) : super(LoginState.initial());
 
   final Reader _read;
 
-  bool _passwordVisible = false;
-
-  bool get passwordVisible => _passwordVisible;
-
-  void togglePasswordVisibility() {
-    _passwordVisible = !_passwordVisible;
-    setState();
-  }
+  void togglePasswordVisibility() =>
+      state = state.copyWith(passwordVisible: !state.passwordVisible);
 
   Future<void> loginUser({
     required String emailAddress,
     required String password,
   }) async {
-    setState(state: AppState.loading);
+    state = state.copyWith(viewState: ViewState.loading);
 
     try {
       await _read(authenticationRepository).login(
@@ -37,7 +32,7 @@ class LoginNotifier extends BaseChangeNotifier {
     } on Failure catch (ex) {
       _read(snackbarService).showErrorSnackBar(ex.message);
     } finally {
-      setState(state: AppState.idle);
+      state = state.copyWith(viewState: ViewState.idle);
     }
   }
 
@@ -53,7 +48,7 @@ class LoginNotifier extends BaseChangeNotifier {
     } on Failure catch (ex) {
       _read(snackbarService).showErrorSnackBar(ex.message);
     } finally {
-      setState(state: AppState.idle);
+      state = state.copyWith(viewState: ViewState.idle);
     }
   }
 
@@ -62,6 +57,7 @@ class LoginNotifier extends BaseChangeNotifier {
   }
 }
 
-final loginNotifierProvider = ChangeNotifierProvider.autoDispose(
+final loginNotifierProvider =
+    StateNotifierProvider.autoDispose<LoginNotifier, LoginState>(
   (ref) => LoginNotifier(ref.read),
 );

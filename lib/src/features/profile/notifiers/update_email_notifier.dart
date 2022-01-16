@@ -1,28 +1,23 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/routes.dart';
-import '../../../core/utilities/base_change_notifier.dart';
+import '../../../core/utilities/view_state.dart';
 import '../../../repositories/authentication_repository.dart';
 import '../../../services/base/failure.dart';
 import '../../../services/navigation_service.dart';
 import '../../../services/snackbar_service.dart';
+import '../states/update_email_state.dart';
 
-class UpdateEmailNotifier extends BaseChangeNotifier {
-  UpdateEmailNotifier(this._read);
+class UpdateEmailNotifier extends StateNotifier<UpdateEmailState> {
+  UpdateEmailNotifier(this._read) : super(UpdateEmailState.initial());
 
   final Reader _read;
 
-  bool _passwordVisible = false;
-
-  bool get passwordVisible => _passwordVisible;
-
-  void togglePasswordVisibility() {
-    _passwordVisible = !_passwordVisible;
-    setState();
-  }
+  void togglePasswordVisibility() =>
+      state = state.copyWith(passwordVisible: !state.passwordVisible);
 
   Future<void> updateEmail(String emailAddress, String password) async {
-    setState(state: AppState.loading);
+    state = state.copyWith(viewState: ViewState.loading);
 
     try {
       await _read(authenticationRepository).updateEmail(
@@ -43,11 +38,12 @@ class UpdateEmailNotifier extends BaseChangeNotifier {
 
       _read(snackbarService).showErrorSnackBar(ex.message);
     } finally {
-      setState(state: AppState.idle);
+      state = state.copyWith(viewState: ViewState.idle);
     }
   }
 }
 
-final updateEmailNotifierProvider = ChangeNotifierProvider.autoDispose(
+final updateEmailNotifierProvider =
+    StateNotifierProvider.autoDispose<UpdateEmailNotifier, UpdateEmailState>(
   (ref) => UpdateEmailNotifier(ref.read),
 );

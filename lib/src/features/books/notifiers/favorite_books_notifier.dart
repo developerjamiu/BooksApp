@@ -1,11 +1,12 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../core/utilities/base_change_notifier.dart';
 import '../../../repositories/favorite_books_repository.dart';
 import '../models/favorite_book.dart';
+import '../states/favorite_books_state.dart';
 
-class FavoriteBooksNotitier extends BaseChangeNotifier {
-  FavoriteBooksNotitier(this._read, {required this.bookId}) {
+class FavoriteBooksNotitier extends StateNotifier<FavoriteBooksState> {
+  FavoriteBooksNotitier(this._read, {required this.bookId})
+      : super(FavoriteBooksState.initial()) {
     checkIsFavorite(bookId);
   }
 
@@ -13,16 +14,13 @@ class FavoriteBooksNotitier extends BaseChangeNotifier {
 
   final String bookId;
 
-  bool _isFavorite = false;
-  bool get isFavorite => _isFavorite;
-
   Future<void> checkIsFavorite(String bookId) async {
-    _isFavorite = await _read(favoriteBooksRepository).bookExists(bookId);
-    setState(state: AppState.idle);
+    final isFavorite = await _read(favoriteBooksRepository).bookExists(bookId);
+    state = state.copyWith(isFavorite: isFavorite);
   }
 
   Future<void> addOrRemoveFromFavorite(FavoriteBook book) async {
-    if (_isFavorite) {
+    if (state.isFavorite) {
       await removeBookFromFavorite(book);
     } else {
       await addBookToFavorite(book);
@@ -42,7 +40,7 @@ class FavoriteBooksNotitier extends BaseChangeNotifier {
   }
 }
 
-final favoriteBooksNotifierProvider =
-    ChangeNotifierProvider.family<FavoriteBooksNotitier, String>(
+final favoriteBooksNotifierProvider = StateNotifierProvider.family<
+    FavoriteBooksNotitier, FavoriteBooksState, String>(
   (ref, bookId) => FavoriteBooksNotitier(ref.read, bookId: bookId),
 );
