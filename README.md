@@ -1,10 +1,10 @@
 # Books App
 
-App and Up Flutter Take Home Project
+Google Books API Exploration
 
 ## Introduction
 
-This project is the implementation of the App and Up Flutter Take Home Project.
+This project explores the Google Books API.
 
 ### Requirements
 
